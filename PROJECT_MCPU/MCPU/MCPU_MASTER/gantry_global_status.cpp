@@ -8,17 +8,15 @@
 #include <mutex>
 #include "PCB301.h"
 #include "PCB302.h"
+#include "PCB326.h"
 #include "CanOpenMotor.h"
 #include "Exposuremodule.h"
 #include "awsProtocol.h"
 #include "Log.h"
 #include "ArmMotor.h"
 #include "TiltMotor.h"
-#include "SlideMotor.h"
-#include "BodyMotor.h"
 #include "VerticalMotor.h"
 #include "Debugger.h"
-#include "PCB326.h"
 
 using namespace System;
 using namespace System::Diagnostics;
@@ -76,17 +74,17 @@ void Gantry::initialize(void) {
 
         // System in normal operating mode
         can_driver_simulator = false;
-        generator_simulator = false;
         pcb301_simulator = false;
         pcb302_simulator = false;
         pcb303_simulator = false;
         pcb304_simulator = false;
         pcb325_simulator = false;
         pcb326_simulator = false;
+        pcb334_simulator = false;
+        pcb335_simulator = false;
+        pcb336_simulator = false;
         motor_tilt_simulator = false;
         motor_arm_simulator = false;
-        motor_slide_simulator = false;
-        motor_body_simulator = false;
         motor_vertical_simulator = false;
     }
     else if (operating_demo_status) {
@@ -97,16 +95,15 @@ void Gantry::initialize(void) {
         pcb301_simulator = false;       // The PCB301 board shall be operating
         pcb302_simulator = false;       // The PCB302 board shall be operating
         pcb304_simulator = false;        // The PCB304 board shall be partiually operating (only the displays) and partially set in demo
-        motor_tilt_simulator = false;   // Full operating
-        motor_arm_simulator = false;    // Full Operating
-        motor_body_simulator = false;   // Full operating
-        motor_vertical_simulator = false;   // Full Operating
-        motor_slide_simulator = false;      // Full Operating
-
-        generator_simulator = true;     // The generator shall be emulated 
         pcb303_simulator = true;        // The PCB303 board shall be emulated        
         pcb325_simulator = true;        // The PCB325 board shall be emulated
         pcb326_simulator = true;        // The PCB326 board shall be emulated
+        pcb334_simulator = false;        // The PCB326 board shall be emulated
+        pcb335_simulator = true;        // The PCB326 board shall be emulated
+        pcb336_simulator = true;        // The PCB326 board shall be emulated
+        motor_tilt_simulator = false;   // Full operating
+        motor_arm_simulator = false;    // Full Operating
+        motor_vertical_simulator = false;   // Full Operating
 
     }
     else {
@@ -157,15 +154,7 @@ void Gantry::initialize(void) {
             can_driver_simulator = true;
         }
 
-        if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_GENERATOR]) == 1) {
-            LogClass::logInFile("GANTRY: GENERATOR IN NORMAL MODE ");
-            generator_simulator = false;
-        }
-        else {
-            LogClass::logInFile("GANTRY: GENERATOR IN SYM MODE ");
-            generator_simulator = true;
-        }
-
+        
         if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_PCB301]) == 1) {
             LogClass::logInFile("GANTRY: PCB301 IN NORMAL MODE ");
             pcb301_simulator = false;
@@ -220,6 +209,35 @@ void Gantry::initialize(void) {
             pcb326_simulator = true;
         }
 
+        if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_PCB334]) == 1) {
+            LogClass::logInFile("GANTRY: PCB334 IN NORMAL MODE ");
+            pcb334_simulator = false;
+        }
+        else {
+            LogClass::logInFile("GANTRY: PCB334 IN SYM MODE ");
+            pcb334_simulator = true;
+        }
+
+        if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_PCB335]) == 1) {
+            LogClass::logInFile("GANTRY: PCB335 IN NORMAL MODE ");
+            pcb335_simulator = false;
+        }
+        else {
+            LogClass::logInFile("GANTRY: PCB335 IN SYM MODE ");
+            pcb335_simulator = true;
+        }
+
+        if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_PCB336]) == 1) {
+            LogClass::logInFile("GANTRY: PCB336 IN NORMAL MODE ");
+            pcb336_simulator = false;
+        }
+        else {
+            LogClass::logInFile("GANTRY: PCB336 IN SYM MODE ");
+            pcb336_simulator = true;
+        }
+
+
+
         if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_TILT]) == 1) {
             LogClass::logInFile("GANTRY: TILT IN NORMAL MODE ");
             motor_tilt_simulator = false;
@@ -238,23 +256,7 @@ void Gantry::initialize(void) {
             motor_arm_simulator = true;
         }
 
-        if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_SLIDE]) == 1) {
-            LogClass::logInFile("GANTRY: SLIDE IN NORMAL MODE ");
-            motor_slide_simulator = false;
-        }
-        else {
-            motor_slide_simulator = true;
-            LogClass::logInFile("GANTRY: SLIDE IN SYM MODE ");
-        }
-
-        if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_BODY]) == 1) {
-            LogClass::logInFile("GANTRY: BODY IN NORMAL MODE ");
-            motor_body_simulator = false;
-        }
-        else {
-            LogClass::logInFile("GANTRY: BODY IN SYM MODE ");
-            motor_body_simulator = true;
-        }
+       
 
         if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_VERTICAL]) == 1) {
             LogClass::logInFile("GANTRY: VERTICAL IN NORMAL MODE ");
@@ -376,13 +378,7 @@ bool Gantry::getObstacleRotationStatus(int addr, CANOPEN::CanOpenMotor::motor_ro
 
     case CANOPEN::MotorDeviceAddresses::TILT_ID:
         break;
-    case CANOPEN::MotorDeviceAddresses::BODY_ID:
-        return PCB326::isSensorActive(SENS_CS1 | SENS_CS2 | SENS_CS3 | SENS_CS4);
-        break;
-
-    case CANOPEN::MotorDeviceAddresses::SLIDE_ID:
-        return PCB326::isSensorActive(SENS_CS3 | SENS_CS4);
-        break;
+ 
     case CANOPEN::MotorDeviceAddresses::VERTICAL_ID:
         break;
     }
@@ -436,26 +432,7 @@ bool Gantry::getManualRotationIncrease(int addr) {
         }
         break;
 
-    case CANOPEN::MotorDeviceAddresses::BODY_ID:
-        if (manual_rotation_mode == manual_rotation_options::GANTRY_STANDARD_STATUS_MANUAL_ROTATION) {
-            if (PCB301::get_button_body_cw()) return true;
-        }else if (manual_rotation_mode == manual_rotation_options::GANTRY_BODY_MANUAL_ROTATION) {
-            if (PCB301::get_button_body_cw()) return true;
-            if (PCB301::get_pedal_up_stat()) return true;
-            if (PCB301::get_button_cw_stat()) return true;
-        }
-        break;
 
-    case CANOPEN::MotorDeviceAddresses::SLIDE_ID:
-        if (manual_rotation_mode == manual_rotation_options::GANTRY_STANDARD_STATUS_MANUAL_ROTATION) {
-            if (PCB301::get_button_slide_up_stat()) return true;
-        }else if (manual_rotation_mode == manual_rotation_options::GANTRY_SLIDE_MANUAL_ROTATION) {
-            if (PCB301::get_button_slide_up_stat()) return true;
-            if (PCB301::get_button_down_stat()) return true;
-            if (PCB301::get_pedal_down_stat()) return true;
-        }
-
-        break;
 
     case CANOPEN::MotorDeviceAddresses::VERTICAL_ID:
         if (manual_rotation_mode == manual_rotation_options::GANTRY_STANDARD_STATUS_MANUAL_ROTATION) {
@@ -494,28 +471,6 @@ bool Gantry::getManualRotationDecrease(int addr) {
             if (PCB301::get_pedal_down_stat()) return true;
         }
         break;
-    case CANOPEN::MotorDeviceAddresses::BODY_ID:
-        if (manual_rotation_mode == manual_rotation_options::GANTRY_STANDARD_STATUS_MANUAL_ROTATION) {
-            if (PCB301::get_button_body_ccw()) return true;
-        }
-        else if (manual_rotation_mode == manual_rotation_options::GANTRY_BODY_MANUAL_ROTATION) {
-            if (PCB301::get_button_body_ccw()) return true;
-            if (PCB301::get_pedal_down_stat()) return true;
-            if (PCB301::get_button_ccw_stat()) return true;
-            
-        }
-        break;
-    case CANOPEN::MotorDeviceAddresses::SLIDE_ID:
-        if (manual_rotation_mode == manual_rotation_options::GANTRY_STANDARD_STATUS_MANUAL_ROTATION) {
-            if (PCB301::get_button_slide_down_stat()) return true;
-        }
-        else if (manual_rotation_mode == manual_rotation_options::GANTRY_SLIDE_MANUAL_ROTATION) {
-            if (PCB301::get_button_slide_down_stat()) return true;
-            if (PCB301::get_button_up_stat()) return true; // Makes use of Up notation to drive upward
-            if (PCB301::get_pedal_up_stat()) return true;  // Makes use of Up notation to drive upward     
-        }
-
-        break;
     case CANOPEN::MotorDeviceAddresses::VERTICAL_ID:
         if (manual_rotation_mode == manual_rotation_options::GANTRY_STANDARD_STATUS_MANUAL_ROTATION) {
             if (PCB301::get_button_down_stat()) return true;
@@ -545,9 +500,7 @@ CANOPEN::CanOpenMotor::motor_rotation_activations Gantry::getManualActivationReq
 bool Gantry::isMotorsActive(void) {
     return (
         ArmMotor::device->isBusy() ||
-        TiltMotor::device->isBusy() ||
-        BodyMotor::device->isBusy() ||
-        SlideMotor::device->isBusy() ||
+        TiltMotor::device->isBusy() ||       
         VerticalMotor::device->isBusy()
         );
 }

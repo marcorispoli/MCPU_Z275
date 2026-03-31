@@ -51,8 +51,6 @@ public:
     enum class manual_rotation_options {
         GANTRY_MANUAL_ROTATION_DISABLED = 0,    //!< The Manual rotation is globally disabled        
         GANTRY_STANDARD_STATUS_MANUAL_ROTATION, //!< Arm rotation and Vertical activation with buttons and pedals
-        GANTRY_BODY_MANUAL_ROTATION,            //!< Pedals and Buttons for Body rotation
-        GANTRY_SLIDE_MANUAL_ROTATION,           //!< Pedals and Buttons for Slide
         GANTRY_TILT_MANUAL_ROTATION,            //!< Pedals and Buttons for Slide
         GANTRY_ARM_MANUAL_ROTATION,             //!< Pedals and Buttons for Arm
         GANTRY_VERTICAL_MANUAL_ROTATION,        //!< Pedals and Buttons for Vertical
@@ -111,12 +109,13 @@ public:
     static inline bool isPcb304Demo(void) { return pcb304_simulator; }
     static inline bool isPcb325Demo(void) { return pcb325_simulator; }
     static inline bool isPcb326Demo(void) { return pcb326_simulator; }
+    static inline bool isPcb334Demo(void) { return pcb326_simulator; }
+    static inline bool isPcb335Demo(void) { return pcb326_simulator; }
+    static inline bool isPcb336Demo(void) { return pcb326_simulator; }
+
     static inline bool isMotorTiltDemo(void) { return motor_tilt_simulator; }
     static inline bool isMotorArmDemo(void) { return motor_arm_simulator; }
-    static inline bool isMotorBodyDemo(void) { return motor_body_simulator; }
     static inline bool isMotorVerticalDemo(void) { return motor_vertical_simulator; }
-    static inline bool isMotorSlideDemo(void) { return motor_slide_simulator; }
-    static inline bool isGeneratorDemo(void) { return generator_simulator; }
     static inline bool isCanDriverDemo(void) { return can_driver_simulator; }
 
     // Motor Activation
@@ -136,12 +135,12 @@ private:
     static bool pcb304_simulator = false;
     static bool pcb325_simulator = false;
     static bool pcb326_simulator = false;
+    static bool pcb334_simulator = false;
+    static bool pcb335_simulator = false;
+    static bool pcb336_simulator = false;
     static bool motor_vertical_simulator = false;
     static bool motor_tilt_simulator = false;
     static bool motor_arm_simulator = false;
-    static bool motor_body_simulator = false;
-    static bool motor_slide_simulator = false;
-    static bool generator_simulator = false;
     static bool can_driver_simulator = false;
 
     

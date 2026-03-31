@@ -95,60 +95,6 @@
     <ClInclude Include="WINDOWS\OperatingForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GENERATOR\TcpIpClientCLI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\Generator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\api_log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\CaDataDic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\R2CP_Eth.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\system_messages.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\CaDataDicGen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\R2CP_Index.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicHdlInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicNetworkInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicPatientInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicR2CPInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicRadInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicRFInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicServiceInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicSystemInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GENERATOR\R2CP\GenDataDic\Interfaces\aDataDicTestInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WINDOWS\ConfirmationWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -167,13 +113,7 @@
     <ClInclude Include="DEVICES\PCB326.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GENERATOR\ExposureModule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MOTORS\BodyMotor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MOTORS\SlideMotor.h">
+    <ClInclude Include="EXPOSURES\ExposureModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WINDOWS\IconWindow.h">
@@ -254,6 +194,15 @@
     <ClInclude Include="WINDOWS\SERVICE\ServiceCollimatorTool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DEVICES\PCB334.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DEVICES\PCB335.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DEVICES\PCB336.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">
@@ -310,39 +259,6 @@
     <ClCompile Include="WINDOWS\OperatingForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GENERATOR\TcpIpClientCLI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\Generator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\api_log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\CaDataDic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\R2CP_Eth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\GenDataDic\CaDataDicGen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\GenDataDic\CaDataDicGen_GenIndex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\GenDataDic\CaDataDicGen_Network.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\GenDataDic\CaDataDicGen_PatientIndex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\GenDataDic\CaDataDicGen_Service.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GENERATOR\R2CP\GenDataDic\CaDataDicGen_SystemIndex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WINDOWS\ConfirmationWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -367,22 +283,16 @@
     <ClCompile Include="AWS\awsEvents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GENERATOR\Exposure2DModule.cpp">
+    <ClCompile Include="EXPOSURES\Exposure2DModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GENERATOR\Exposure3DModule.cpp">
+    <ClCompile Include="EXPOSURES\Exposure3DModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GENERATOR\ExposureAEModule.cpp">
+    <ClCompile Include="EXPOSURES\ExposureAEModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GENERATOR\ExposureComboModule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MOTORS\BodyMotor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MOTORS\SlideMotor.cpp">
+    <ClCompile Include="EXPOSURES\ExposureComboModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MOTORS\CanOpenDriver\CanOpenCiAProcedures.cpp">
@@ -415,7 +325,7 @@
     <ClCompile Include="WINDOWS\KeyPaddle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GENERATOR\ExposureTest.cpp">
+    <ClCompile Include="EXPOSURES\ExposureTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WINDOWS\SERVICE\ServiceExposureTool.cpp">
@@ -430,7 +340,7 @@
     <ClCompile Include="WINDOWS\SERVICE\ServiceZeroSettingTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GENERATOR\ExposureModule.cpp">
+    <ClCompile Include="EXPOSURES\ExposureModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DEBUGGER\Debugger.cpp">
@@ -457,7 +367,16 @@
     <ClCompile Include="WINDOWS\SERVICE\ServiceCollimatorTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GENERATOR\Exposure3DCalibModule.cpp">
+    <ClCompile Include="EXPOSURES\Exposure3DCalibModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DEVICES\PCB334.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DEVICES\PCB335.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DEVICES\PCB336.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

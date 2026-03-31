@@ -219,14 +219,12 @@ namespace StartupOperatingMode {
 	private: bool Startup_PCB304(void);
 	private: bool Startup_PCB325(void);
 	private: bool Startup_PCB326(void);
-	private: bool Startup_MotorBody(void);
+	private: bool Startup_PCB334(void);
+	private: bool Startup_PCB335(void);
+	private: bool Startup_PCB336(void);
 	private: bool Startup_MotorTilt(void);
 	private: bool Startup_MotorArm(void);
-	private: bool Startup_MotorShift(void);
 	private: bool Startup_MotorVertical(void);
-	private: bool Startup_Generator(void);
-		   
-	
 	
 
 	private: System::Windows::Forms::Label^ labelPcb326Activity;
