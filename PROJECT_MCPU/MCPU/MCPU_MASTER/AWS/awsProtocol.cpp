@@ -4,12 +4,12 @@
 #include "ArmMotor.h"
 #include "VerticalMotor.h"
 #include "TiltMotor.h"
-#include "BodyMotor.h"
-#include "SlideMotor.h"
+
+
 #include "PCB302.h"
 #include "PCB303.h"
 #include "ExposureModule.h"
-#include "Generator.h"
+
 #include "ConfigurationFiles.h"
 #include "Notify.h"
 #include "Log.h"
@@ -80,8 +80,6 @@ awsProtocol::awsProtocol(void) {
     ArmMotor::device->command_completed_event += gcnew CANOPEN::CanOpenMotor::delegate_command_completed_callback(&awsProtocol::EVENT_Executed);
     VerticalMotor::device->command_completed_event += gcnew CANOPEN::CanOpenMotor::delegate_command_completed_callback(&awsProtocol::EVENT_Executed);
     TiltMotor::device->command_completed_event += gcnew CANOPEN::CanOpenMotor::delegate_command_completed_callback(&awsProtocol::EVENT_Executed);
-    BodyMotor::device->command_completed_event += gcnew CANOPEN::CanOpenMotor::delegate_command_completed_callback(&awsProtocol::EVENT_Executed);
-    SlideMotor::device->command_completed_event += gcnew CANOPEN::CanOpenMotor::delegate_command_completed_callback(&awsProtocol::EVENT_Executed);
     ArmMotor::projection_request_event += gcnew ArmMotor::delegate_projection_request_callback(&awsProtocol::EVENT_SelectProjection);
     ArmMotor::abort_projection_request_event += gcnew ArmMotor::delegate_abort_projection_request_callback(&awsProtocol::EVENT_AbortProjection);
 

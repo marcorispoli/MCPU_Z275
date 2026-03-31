@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MCPU_MASTER", "MCPU_MASTER\MCPU_MASTER.vcxproj", "{8557E6E1-7950-47E4-94D6-39F875BB06AA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SIMULATOR", "..\..\PROJECT_SYM\SYM\SYM\MCPU_SYM.vcxproj", "{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{8557E6E1-7950-47E4-94D6-39F875BB06AA}.Release|x64.Build.0 = Release|x64
 		{8557E6E1-7950-47E4-94D6-39F875BB06AA}.Release|x86.ActiveCfg = Release|Win32
 		{8557E6E1-7950-47E4-94D6-39F875BB06AA}.Release|x86.Build.0 = Release|Win32
+		{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}.Debug|x64.ActiveCfg = Debug|x64
+		{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}.Debug|x64.Build.0 = Debug|x64
+		{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}.Debug|x86.ActiveCfg = Debug|Win32
+		{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}.Debug|x86.Build.0 = Debug|Win32
+		{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}.Release|x64.ActiveCfg = Release|x64
+		{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}.Release|x64.Build.0 = Release|x64
+		{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}.Release|x86.ActiveCfg = Release|Win32
+		{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

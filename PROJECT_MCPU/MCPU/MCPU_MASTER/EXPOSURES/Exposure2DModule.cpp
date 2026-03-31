@@ -1,12 +1,11 @@
 #include "ExposureModule.h"
 #include "awsProtocol.h"
-#include "Generator.h"
-#include "R2CP_Eth.h"
-#include "CaDataDicGen.h"
 #include "PCB304.h"
 #include "PCB301.h"
 #include "PCB302.h"
 #include "PCB303.h"
+#include "PCB335.h"
+#include "PCB336.h"
 #include <thread>
 #include "Log.h"
 
@@ -84,8 +83,8 @@ Exposures::exposure_completed_errors Exposures::man_2d_exposure_procedure(bool d
     exposure_data_str = "DETECTOR MAX INTEGRATION TIME: " + exposure_time; LogClass::logInFile(exposure_data_str);
     exposure_data_str = "Filter:" + Exposures::getExposurePulse(0)->filter.ToString(); LogClass::logInFile(exposure_data_str);
 
-    error = (exposure_completed_errors)generator2DPulsePreparation(ExpName, Exposures::getExposurePulse(0)->kV, Exposures::getExposurePulse(0)->mAs, large_focus, detector_synch, grid_synch, exposure_time);
-    if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
+    //error = (exposure_completed_errors)generator2DPulsePreparation(ExpName, Exposures::getExposurePulse(0)->kV, Exposures::getExposurePulse(0)->mAs, large_focus, detector_synch, grid_synch, exposure_time);
+    //if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
 
 
     // Checks the filter in position
@@ -95,7 +94,7 @@ Exposures::exposure_completed_errors Exposures::man_2d_exposure_procedure(bool d
     if (!PCB304::waitGridCompleted()) return Exposures::exposure_completed_errors::XRAY_GRID_ERROR;
 
     if (!demo) {
-        error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
+        //error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
         setXrayEnable(false);
 
         // The index is the number associated to the Databank in the procedure definition. It is not the Databank index value itself!!
@@ -110,7 +109,7 @@ Exposures::exposure_completed_errors Exposures::man_2d_exposure_procedure(bool d
         // Activate the Buzzer in manual mode
         PCB301::setBuzzerManualMode(true);
 
-        float result_mas = demo2DPulse(Exposures::getExposurePulse(0)->mAs, getSelectedAnodeCurrent());
+       /* float result_mas = demo2DPulse(Exposures::getExposurePulse(0)->mAs, getSelectedAnodeCurrent());
         if (result_mas <= 0) {
             setExposedPulse(0, gcnew exposure_pulse(epulse->getKv(), -1 * result_mas, epulse->getFilter()));
             error = exposure_completed_errors::XRAY_BUTTON_RELEASE;
@@ -119,6 +118,7 @@ Exposures::exposure_completed_errors Exposures::man_2d_exposure_procedure(bool d
             setExposedPulse(0, gcnew exposure_pulse(epulse->getKv(), epulse->getmAs(), epulse->getFilter()));
             error = exposure_completed_errors::XRAY_NO_ERRORS;
         }
+        */
         PCB301::setBuzzerManualMode(false);
 
     }
@@ -200,8 +200,8 @@ Exposures::exposure_completed_errors Exposures::aec_2d_exposure_procedure(bool d
     exposure_data_str = "Filter Pre:" + Exposures::getExposurePulse(0)->filter.ToString(); LogClass::logInFile(exposure_data_str);
 
     //exposure_time = 5000;
-    error = (exposure_completed_errors)generator2DAecPrePulsePreparation(ExpName, grid_synch, Exposures::getExposurePulse(0)->kV, Exposures::getExposurePulse(0)->mAs, large_focus,  exposure_time);
-    if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
+    //error = (exposure_completed_errors)generator2DAecPrePulsePreparation(ExpName, grid_synch, Exposures::getExposurePulse(0)->kV, Exposures::getExposurePulse(0)->mAs, large_focus,  exposure_time);
+    //if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
 
     // Checks the filter in position
     if (!PCB303::waitFilterCompleted()) return Exposures::exposure_completed_errors::XRAY_FILTER_ERROR;
@@ -211,13 +211,13 @@ Exposures::exposure_completed_errors Exposures::aec_2d_exposure_procedure(bool d
     
     if (!demo) {
         // Sequence for the AEC: only the Standby is admitted as returned code: the WaitFootRelease is not admitted here
-        error = (exposure_completed_errors) generatorExecutePulseSequence(ExpName, 40000);
+        //error = (exposure_completed_errors) generatorExecutePulseSequence(ExpName, 40000);
 
         // The index is the number associated to the Databank in the procedure definition. It is not the Databank index value itself!!
         if (large_focus) setExposedData(1, (unsigned char)0, getExposurePulse(0)->filter, 1);
         else setExposedData(1, (unsigned char)0, getExposurePulse(0)->filter, 0);
         
-        if (getGeneratorStatus() != R2CP::Stat_Standby) error = exposure_completed_errors::XRAY_INVALID_GENERATOR_STATUS;
+        //if (getGeneratorStatus() != R2CP::Stat_Standby) error = exposure_completed_errors::XRAY_INVALID_GENERATOR_STATUS;
     }
     else {
         // Demo pre-pulse implementation
@@ -225,7 +225,7 @@ Exposures::exposure_completed_errors Exposures::aec_2d_exposure_procedure(bool d
 
         // Activate the Buzzer in manual mode
         PCB301::setBuzzerManualMode(true);
-
+        /*
         float result_mas = demo2DPulse(Exposures::getExposurePulse(0)->mAs, getSelectedAnodeCurrent());
         if (result_mas <= 0) {
             setExposedPulse(0, gcnew exposure_pulse(epulse->getKv(), -1 * result_mas, epulse->getFilter()));
@@ -235,7 +235,7 @@ Exposures::exposure_completed_errors Exposures::aec_2d_exposure_procedure(bool d
             setExposedPulse(0, gcnew exposure_pulse(epulse->getKv(), epulse->getmAs(), epulse->getFilter()));
             error = exposure_completed_errors::XRAY_NO_ERRORS;
         }
-
+        */
         PCB301::setBuzzerManualMode(false);
     }
     
@@ -276,13 +276,14 @@ Exposures::exposure_completed_errors Exposures::aec_2d_exposure_procedure(bool d
     // Preparation for pulse
     exposure_data_str = ExpName + "AEC PULSE DATA ---------------- "; LogClass::logInFile(exposure_data_str);
     exposure_data_str = "Filter:" + Exposures::getExposurePulse(1)->filter.ToString(); LogClass::logInFile(exposure_data_str);
-    error = (exposure_completed_errors)generator2DAecPulsePreparation(ExpName, grid_synch, Exposures::getExposurePulse(1)->kV, Exposures::getExposurePulse(1)->mAs, large_focus, exposure_time);
-    if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
+    
+    //error = (exposure_completed_errors)generator2DAecPulsePreparation(ExpName, grid_synch, Exposures::getExposurePulse(1)->kV, Exposures::getExposurePulse(1)->mAs, large_focus, exposure_time);
+    //if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
 
 
     if (!demo) {
 
-        error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
+        //error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
         setXrayEnable(false);
 
         // The index is the number associated to the Databank in the procedure definition. It is not the Databank index value itself!! 
@@ -296,6 +297,7 @@ Exposures::exposure_completed_errors Exposures::aec_2d_exposure_procedure(bool d
         // Activate the Buzzer in manual mode
         PCB301::setBuzzerManualMode(true);
 
+        /*
         float result_mas = demo2DPulse(Exposures::getExposurePulse(1)->mAs, getSelectedAnodeCurrent());
         if (result_mas <= 0) {
             setExposedPulse(1, gcnew exposure_pulse(epulse->getKv(), -1 * result_mas, epulse->getFilter()));
@@ -305,6 +307,7 @@ Exposures::exposure_completed_errors Exposures::aec_2d_exposure_procedure(bool d
             setExposedPulse(1, gcnew exposure_pulse(epulse->getKv(), epulse->getmAs(), epulse->getFilter()));
             error = exposure_completed_errors::XRAY_NO_ERRORS;
         }
+        */
 
         PCB301::setBuzzerManualMode(false);
     }

@@ -89,39 +89,40 @@ public:
     /// |SymPcb326|Byte|0|1/0|PCB326 Module: 1= normal mode, 0 = simulated mode|
     /// 
     literal System::String^ PARAM_SYM_MODE = "SYM_MODE";
-    literal System::String^ PARAM_SYM_MODE_COMMENT = "SYM Mode Setting: [1=Run, 0=Sim]: ip, port, autostart, can-driver, generator, tilt, Arm,Body,Vertical,Slide, 301, 302, 303,304,325,326";
+    literal System::String^ PARAM_SYM_MODE_COMMENT = "SYM Mode Setting: [1=Run, 0=Sim]: ip, port, autostart, can-driver, tilt, Arm,Vertical, 301, 302, 303, 304, 325, 326, 334, 335, 336";
     literal int     SYM_MODE_IP = 0;
     literal int     SYM_MODE_PORT = 1;
     literal int     SYM_AUTOSTART = 2;
-    literal int     SYM_MODE_CAN = 3;
-    literal int     SYM_MODE_GENERATOR = 4;
-    literal int     SYM_MODE_TILT = 5;
-    literal int     SYM_MODE_ARM = 6;
-    literal int     SYM_MODE_BODY = 7;
-    literal int     SYM_MODE_VERTICAL = 8;
-    literal int     SYM_MODE_SLIDE = 9;
-    literal int     SYM_MODE_PCB301 = 10;
-    literal int     SYM_MODE_PCB302 = 11;
-    literal int     SYM_MODE_PCB303 = 12;
-    literal int     SYM_MODE_PCB304 = 13;
-    literal int     SYM_MODE_PCB325 = 14;
-    literal int     SYM_MODE_PCB326 = 15;
+    literal int     SYM_MODE_CAN = 3;    
+    literal int     SYM_MODE_TILT = 4;
+    literal int     SYM_MODE_ARM = 5;    
+    literal int     SYM_MODE_VERTICAL = 6;    
+    literal int     SYM_MODE_PCB301 = 7;
+    literal int     SYM_MODE_PCB302 = 8;
+    literal int     SYM_MODE_PCB303 = 9;
+    literal int     SYM_MODE_PCB304 = 10;
+    literal int     SYM_MODE_PCB325 = 11;
+    literal int     SYM_MODE_PCB326 = 12;
+    literal int     SYM_MODE_PCB334 = 13;
+    literal int     SYM_MODE_PCB335 = 14;
+    literal int     SYM_MODE_PCB336 = 15;
+
     literal System::String^ PARAM_SYM_MODE_IP_DEFAULT = "127.0.0.1";
     literal System::String^ PARAM_SYM_MODE_PORT_DEFAULT = "20000";
     literal System::String^ PARAM_SYM_AUTOSTART_DEFAULT = "1";
     literal System::String^ PARAM_SYM_MODE_CAN_DEFAULT = "0";
-    literal System::String^ PARAM_SYM_MODE_GENERATOR_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_TILT_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_ARM_DEFAULT = "0";
-    literal System::String^ PARAM_SYM_MODE_BODY_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_VERTICAL_DEFAULT = "0";
-    literal System::String^ PARAM_SYM_MODE_SLIDE_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB301_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB302_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB303_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB304_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB325_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB326_DEFAULT = "0";
+    literal System::String^ PARAM_SYM_MODE_PCB334_DEFAULT = "0";
+    literal System::String^ PARAM_SYM_MODE_PCB335_DEFAULT = "0";
+    literal System::String^ PARAM_SYM_MODE_PCB336_DEFAULT = "0";
 
 
 
@@ -174,8 +175,10 @@ public:
     literal int        PARAM_PACKAGE_FW304 = 4;
     literal int        PARAM_PACKAGE_FW325 = 5;
     literal int        PARAM_PACKAGE_FW326 = 6;
+    literal int        PARAM_PACKAGE_FW334 = 6;
+    literal int        PARAM_PACKAGE_FW335 = 6;
+    literal int        PARAM_PACKAGE_FW336 = 6;
     literal int        PARAM_PACKAGE_FWCAN = 7;
-    literal int        PARAM_PACKAGE_FWGEN = 8;
 
     literal System::String^    PARAM_PACKAGE_ID_DEFAULT =    "1.0";
     literal System::String^    PARAM_PACKAGE_FW301_DEFAULT = "0.1";
@@ -184,8 +187,10 @@ public:
     literal System::String^    PARAM_PACKAGE_FW304_DEFAULT = "0.1";
     literal System::String^    PARAM_PACKAGE_FW325_DEFAULT = "0.1";
     literal System::String^    PARAM_PACKAGE_FW326_DEFAULT = "0.1";
+    literal System::String^    PARAM_PACKAGE_FW334_DEFAULT = "0.1";
+    literal System::String^    PARAM_PACKAGE_FW335_DEFAULT = "0.1";
+    literal System::String^    PARAM_PACKAGE_FW336_DEFAULT = "0.1";
     literal System::String^    PARAM_PACKAGE_FWCAN_DEFAULT = "0.1";
-    literal System::String^    PARAM_PACKAGE_FWGEN_DEFAULT = "0.1";
 
     /// \addtogroup  ConfigurationFilesDescription 
     /// 
@@ -266,18 +271,18 @@ public:
             PARAM_SYM_MODE_PORT_DEFAULT,
             PARAM_SYM_AUTOSTART_DEFAULT,
             PARAM_SYM_MODE_CAN_DEFAULT,
-            PARAM_SYM_MODE_GENERATOR_DEFAULT,
             PARAM_SYM_MODE_TILT_DEFAULT,
             PARAM_SYM_MODE_ARM_DEFAULT,
-            PARAM_SYM_MODE_BODY_DEFAULT,
             PARAM_SYM_MODE_VERTICAL_DEFAULT,
-            PARAM_SYM_MODE_SLIDE_DEFAULT,
             PARAM_SYM_MODE_PCB301_DEFAULT,
             PARAM_SYM_MODE_PCB302_DEFAULT,
             PARAM_SYM_MODE_PCB303_DEFAULT,
             PARAM_SYM_MODE_PCB304_DEFAULT,
             PARAM_SYM_MODE_PCB325_DEFAULT,
-            PARAM_SYM_MODE_PCB326_DEFAULT
+            PARAM_SYM_MODE_PCB326_DEFAULT,
+            PARAM_SYM_MODE_PCB334_DEFAULT,
+            PARAM_SYM_MODE_PCB335_DEFAULT,
+            PARAM_SYM_MODE_PCB336_DEFAULT
             }),
 
 
@@ -293,8 +298,10 @@ public:
             PARAM_PACKAGE_FW304_DEFAULT,
             PARAM_PACKAGE_FW325_DEFAULT,
             PARAM_PACKAGE_FW326_DEFAULT,
+            PARAM_PACKAGE_FW334_DEFAULT,
+            PARAM_PACKAGE_FW335_DEFAULT,
+            PARAM_PACKAGE_FW336_DEFAULT,
             PARAM_PACKAGE_FWCAN_DEFAULT,
-            PARAM_PACKAGE_FWGEN_DEFAULT,
             }),
          
             CONFIG_FILE_ITEM(PARAM_AWS_CONNECTIONS, PARAM_AWS_CONNECTIONS_COMMENT, CONFIG_FILE_DEFAULT{

@@ -8,8 +8,6 @@
 #include "IconWindow.h"
 #include "VerticalMotor.h"
 #include "ArmMotor.h"
-#include "BodyMotor.h"
-#include "SlideMotor.h"
 #include "TiltMotor.h"
 #include "ExposureModule.h"
 #include "../DEVICES/PCB325.h"
@@ -18,6 +16,9 @@
 #include "../DEVICES/PCB301.h"
 #include "../DEVICES/PCB304.h"
 #include "../DEVICES/PCB326.h"
+#include "../DEVICES/PCB334.h"
+#include "../DEVICES/PCB335.h"
+#include "../DEVICES/PCB336.h"
 #include "awsProtocol.h"
 
 
@@ -173,12 +174,6 @@ void OperatingForm::formInitialization(void) {
 	((ConfirmationWindow^)pAbort)->button_ok_event += gcnew ConfirmationWindow::delegate_button_callback(this, &OperatingForm::onAbortConfirmOk);
 	//________________________________________________________________________________________
 	
-	// Confirmation Panel Setup ____________________________________________________________
-	System::String^ confInfoTitle = "[" + Notify::TranslateNumber(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION) + "] " + Notify::TranslateTitle(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION);
-	System::String^ confInfoContent = Notify::TranslateContent(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION);
-	pShiftConf = gcnew ConfirmationWindow(this, ConfirmationWindow::InfoType::INF_WIN, confInfoTitle, confInfoContent);
-	((ConfirmationWindow^)pShiftConf)->button_canc_event += gcnew ConfirmationWindow::delegate_button_callback(this, &OperatingForm::onShiftConfirmCanc);
-	((ConfirmationWindow^)pShiftConf)->button_ok_event += gcnew ConfirmationWindow::delegate_button_callback(this, &OperatingForm::onShiftConfirmOk);
 	
 	// AEC Panel creation	
 	pAec = gcnew aecSelectionDialog();
@@ -201,16 +196,13 @@ void OperatingForm::formInitialization(void) {
 	labelXrayStatus->Text = Notify::TranslateLabel(Notify::messages::LABEL_NOT_READY_FOR_EXPOSURE);
 	
 
-	
-	
-	
 	// Activate the Demo Icon if the Xrays are not 
 	demoIcon->BackColor = Color::Transparent;
 	if (Gantry::isOperatingDemo()) {		
 		demoIcon->BackgroundImage = DEMO_IMAGE;
 		demoIcon->Show();
 	}
-	else if (Exposures::isSimulatorMode()) {
+	else if (PCB335::device->isSimulatorMode()) {
 		demoIcon->BackgroundImage = SYM_IMAGE;
 		demoIcon->Show();
 	}
@@ -408,18 +400,6 @@ void OperatingForm::evaluateXrayStatus(void) {
 	}
 
 	
-	// Evaluate the Xray icon display activation during Exposure
-	/*
-	static bool xray_running = true;
-	if (xray_running != Exposures::isXrayRunning()) {
-		xray_running = Exposures::isXrayRunning();
-		if (xray_running) {
-			((IconWindow^)pXray)->open();
-		}
-		else {
-			((IconWindow^)pXray)->close();
-		}
-	}*/
 	
 
 }
@@ -717,24 +697,6 @@ void OperatingForm::evaluateDoorStatus(void) {
 
 }
 
-void OperatingForm::evaluateSlideStatus(bool init) {
-	static int stat = 255;
-	if (init) stat = 255;
-
-	int cur_stat;
-	if (SlideMotor::device->getCurrentPosition() < 500) cur_stat = 0;
-	else cur_stat = 1;
-
-	if (stat != cur_stat) {
-		stat = cur_stat;
-
-		if (stat == 0)  slideButton->BackgroundImage = SLIDE_0_IMAGE;
-		else slideButton->BackgroundImage = SLIDE_10_IMAGE;
-	}
-
-
-}
-
 
 void OperatingForm::evaluateAwsComponentEvent(void) {
 	bool generate_event_component = false;
@@ -879,16 +841,6 @@ void OperatingForm::onConfirmCanc(void) {
 	((ProjectionForm^)pProj)->close();
 }
 
-void OperatingForm::onShiftConfirmOk(void) {
-
-	if (SlideMotor::device->getCurrentPosition() < 500) SlideMotor::isoAutoPosition(1000);
-	else SlideMotor::isoAutoPosition(0);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-	
-}
-void OperatingForm::onShiftConfirmCanc(void) {
-	
-}
-
 void OperatingForm::onAbortConfirmOk(void) {	
 	ArmMotor::abortProjectionRequest();
 
@@ -947,27 +899,7 @@ void OperatingForm::evaluateDigitDisplays(void) {
 		return;
 	}
 
-	if (BodyMotor::device->isRunning()) {
-		blink = false;
-		intensity = 0xf;
-
-		// Degrees
-		digits = 0;
-		dspval = (BodyMotor::device->getCurrentPosition() / 10);
-		PCB304::setDisplay(dspval, digits, blink, intensity,false,false,false);
-		return;
-	}
-
-	if (SlideMotor::device->isRunning()) {
-		blink = false;
-		intensity = 0xf;
-
-		// Degrees
-		digits = 0;
-		dspval = (SlideMotor::device->getCurrentPosition() / 100);
-		PCB304::setDisplay(dspval, digits, blink, intensity,false,false,false);
-		return;
-	}
+	
 
 	PCB304::setDisplay(false);
 }
@@ -976,8 +908,6 @@ void OperatingForm::evaluatePopupPanels(void) {
 #define TMO 20
 	static bool compression = false;
 	static bool arm = false;
-	static bool body = false;
-	static bool slide = false;
 	static bool vertical = false;
 	static bool tilt = false;
 	static int  timer = 0;
@@ -987,8 +917,6 @@ void OperatingForm::evaluatePopupPanels(void) {
 		if(Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->close();
 		compression = false;
 		arm = false;
-		body = false;
-		slide = false;
 		vertical = false;
 		tilt = false;
 		timer = 0;
@@ -1037,9 +965,7 @@ void OperatingForm::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = true;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(COMPRESSING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_COMPRESSION_ACTIVATED), "(N)");
 			else Gantry::getValuePopupWindow()->open(this, COMPRESSING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_COMPRESSION_ACTIVATED), "(N)");
@@ -1059,9 +985,7 @@ void OperatingForm::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = false;
 			arm = true;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(ARM_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_ARM_ACTIVATED), "(�)");
 			else Gantry::getValuePopupWindow()->open(this, ARM_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_ARM_ACTIVATED), "(�)");
@@ -1080,31 +1004,6 @@ void OperatingForm::evaluatePopupPanels(void) {
 	}
 
 	
-	if (!body) {
-		// Compressor Window Initialization
-		if (BodyMotor::device->isRunning()) {
-			timer = TMO;
-			compression = false;
-			arm = false;
-			body = true;
-			vertical = false;
-			slide = false;
-			tilt = false;
-			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(BODY_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_BODY_ACTIVATED), "(�)");
-			else Gantry::getValuePopupWindow()->open(this, BODY_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_BODY_ACTIVATED), "(�)");
-
-			// Set the value to the current compression
-			float position = (float)BodyMotor::device->getCurrentPosition() / 10;
-			Gantry::getValuePopupWindow()->content(position.ToString());
-			return;
-		}
-	}
-	else {
-		// Set the value to the current compression
-		float position = (float)BodyMotor::device->getCurrentPosition() / 10;
-		Gantry::getValuePopupWindow()->content(position.ToString());
-		if (BodyMotor::device->isRunning()) timer = TMO;
-	}
 
 	if (!vertical) {
 		// Compressor Window Initialization
@@ -1133,31 +1032,6 @@ void OperatingForm::evaluatePopupPanels(void) {
 	}
 	
 	
-	if (!slide) {
-		// Compressor Window Initialization
-		if (SlideMotor::device->isRunning()) {
-			timer = TMO;
-			compression = false;
-			arm = false;
-			body = false;
-			vertical = false;
-			slide = true;
-			tilt = false;
-			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(SLIDE_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_SLIDE_ACTIVATED), "(�)");
-			else Gantry::getValuePopupWindow()->open(this, SLIDE_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_SLIDE_ACTIVATED), "(�)");
-
-			// Set the value to the current compression
-			int position = (int)SlideMotor::device->getCurrentPosition() / 100;
-			Gantry::getValuePopupWindow()->content(position.ToString());
-			return;
-		}
-	}
-	else {
-		// Set the value to the current compression
-		int position = (int)SlideMotor::device->getCurrentPosition() / 100;
-		Gantry::getValuePopupWindow()->content(position.ToString());
-		if (SlideMotor::device->isRunning()) timer = TMO;
-	}
 	
 	if (!tilt) {
 		// Compressor Window Initialization
@@ -1165,9 +1039,7 @@ void OperatingForm::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = false;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = true;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(TILT_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_TILT_ACTIVATED), "(.01�)");
 			else Gantry::getValuePopupWindow()->open(this, TILT_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_TILT_ACTIVATED), "(�)");
@@ -1192,9 +1064,7 @@ void OperatingForm::evaluatePopupPanels(void) {
 		if (!timer) {
 			compression = false;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			Gantry::getValuePopupWindow()->close();			
 		}

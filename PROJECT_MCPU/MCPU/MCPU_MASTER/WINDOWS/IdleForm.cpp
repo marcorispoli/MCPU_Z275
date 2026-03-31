@@ -12,10 +12,11 @@
 #include "PCB304.h"
 #include "PCB325.h"
 #include "PCB326.h"
+#include "PCB334.h"
+#include "PCB335.h"
+#include "PCB336.h"
 #include "VerticalMotor.h"
 #include "ArmMotor.h"
-#include "BodyMotor.h"
-#include "SlideMotor.h"
 #include "TiltMotor.h"
 
 #include "AWS/awsProtocol.h"
@@ -43,9 +44,7 @@
 
 #define COMPRESSING_ICON Image::FromFile(Gantry::applicationResourcePath + "Icons\\COMPRESSING_ICON.PNG")
 #define ARM_EXECUTING_ICON Image::FromFile(Gantry::applicationResourcePath + "Icons\\ARM_MOTOR_ICON.PNG")
-#define BODY_EXECUTING_ICON Image::FromFile(Gantry::applicationResourcePath + "Icons\\BODY_MOTOR_ICON.PNG")
 #define VERTICAL_EXECUTING_ICON Image::FromFile(Gantry::applicationResourcePath + "Icons\\VERTICAL_MOTOR_ICON.PNG")
-#define SLIDE_EXECUTING_ICON Image::FromFile(Gantry::applicationResourcePath + "Icons\\SLIDE_MOTOR_ICON.PNG")
 #define TILT_EXECUTING_ICON Image::FromFile(Gantry::applicationResourcePath + "Icons\\TILT_MOTOR_ICON.PNG")
 
 namespace IDLESTATUS {
@@ -267,12 +266,11 @@ void IdleForm::initIdleStatus(void) {
 		this->xrayMode->Show();
 	}
 	else {
-		if (Exposures::isSimulatorMode()) {
+		if (PCB335::device->isSimulatorMode()) {
 			this->xrayMode->Hide();
 		}
 		else {
-			if (Exposures::isServiceToolConnected()) this->xrayMode->BackgroundImage = SERVICE_TOOL_MODE;
-			else this->xrayMode->BackgroundImage = XRAY_MODE;
+			this->xrayMode->BackgroundImage = XRAY_MODE;
 			this->xrayMode->Show();
 		}
 
@@ -352,8 +350,6 @@ void IdleForm::evaluatePopupPanels(void) {
 	#define TMO 20
 	static bool compression = false;
 	static bool arm = false;
-	static bool body = false;
-	static bool slide = false;
 	static bool vertical = false;
 	static bool tilt = false;
 	static int  timer = 0;
@@ -364,8 +360,6 @@ void IdleForm::evaluatePopupPanels(void) {
 			Gantry::getValuePopupWindow()->close();
 			compression = false;
 			arm = false;
-			body = false;
-			slide = false;
 			vertical = false;
 			tilt = false;
 			timer = 0;
@@ -379,9 +373,9 @@ void IdleForm::evaluatePopupPanels(void) {
 		if (!arm) {
 			compression = false;
 			arm = true;
-			body = false;
+			
 			vertical = false;
-			slide = false;
+			
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(ARM_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_ARM_ACTIVATED), "(°)");
 			else Gantry::getValuePopupWindow()->open(this, ARM_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_ARM_ACTIVATED), "(°)");
@@ -396,25 +390,7 @@ void IdleForm::evaluatePopupPanels(void) {
 	}
 	else arm = false;
 
-	if (BodyMotor::device->isRunning()) {
-		timer = TMO;
-		if (!body) {
-			compression = false;
-			arm = false;
-			body = true;
-			vertical = false;
-			slide = false;
-			tilt = false;
-			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(BODY_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_BODY_ACTIVATED), "(°)");
-			else Gantry::getValuePopupWindow()->open(this, BODY_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_BODY_ACTIVATED), "(°)");
-		}
-
-		// Set the value to the current compression
-		float position = (float)BodyMotor::device->getCurrentPosition() / 10;
-		Gantry::getValuePopupWindow()->content(position.ToString());
-		return;
-	}
-	else body = false;
+	
 
 	
 	if (VerticalMotor::device->isRunning()) {
@@ -422,9 +398,9 @@ void IdleForm::evaluatePopupPanels(void) {
 		if (!vertical) {
 			compression = false;
 			arm = false;
-			body = false;
+			
 			vertical = true;
-			slide = false;
+			
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(VERTICAL_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_VERTICAL_ACTIVATED), "(mm)");
 			else Gantry::getValuePopupWindow()->open(this, VERTICAL_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_VERTICAL_ACTIVATED), "(mm)");
@@ -438,34 +414,15 @@ void IdleForm::evaluatePopupPanels(void) {
 	else vertical = false;
 	
 
-	if (SlideMotor::device->isRunning()) {
-		timer = TMO;
-		if (!slide) {
-			compression = false;
-			arm = false;
-			body = false;
-			vertical = false;
-			slide = true;
-			tilt = false;
-			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(SLIDE_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_SLIDE_ACTIVATED), "(°)");
-			else Gantry::getValuePopupWindow()->open(this, SLIDE_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_SLIDE_ACTIVATED), "(°)");
-		}
-
-		// Set the value to the current compression
-		int position = (int)SlideMotor::device->getCurrentPosition() / 100;
-		Gantry::getValuePopupWindow()->content(position.ToString());
-		return;
-	}
-	else slide = false;
 
 	if (TiltMotor::device->isRunning()) {
 		timer = TMO;
 		if (!tilt) {
 			compression = false;
 			arm = false;
-			body = false;
+			
 			vertical = false;
-			slide = false;
+			
 			tilt = true;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(TILT_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_TILT_ACTIVATED), "(.01°)");
 			else Gantry::getValuePopupWindow()->open(this, TILT_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_TILT_ACTIVATED), "(°)");
@@ -630,27 +587,15 @@ void IdleForm::idleStatusManagement(void) {
 	}
 
 	/// The current exposure mode icon is updated
-	if (!Exposures::isSimulatorMode()) {
-		if (Exposures::isServiceToolConnected()) {
-			if (xray_mode_status != 2) {
-				Notify::activate(Notify::messages::WARNING_GENERATOR_SERVICE_MODE);
-				this->xrayMode->BackgroundImage = SERVICE_TOOL_MODE;
-				xray_mode_status = 2;
-			}
-		}
-		else {
-			if (xray_mode_status != 1) {
-				Notify::deactivate(Notify::messages::WARNING_GENERATOR_SERVICE_MODE);
-				this->xrayMode->BackgroundImage = XRAY_MODE;
-				xray_mode_status = 1;
-			}
-		}
+	if (!PCB335::device->isSimulatorMode()) {		
+		if (xray_mode_status != 1) {
+			this->xrayMode->BackgroundImage = XRAY_MODE;
+			xray_mode_status = 1;
+		}		
 	}
 
 	/// The popup event dialog activation is evaluated.
 	evaluatePopupPanels();
-	
-
 	
 }
 

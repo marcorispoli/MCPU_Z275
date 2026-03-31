@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
-    <ProjectGuid>{8557e6e1-7950-47e4-94d6-39f875bb06aa}</ProjectGuid>
+    <ProjectGuid>{D50DC78D-0FCB-49B4-915A-F8AA3B03D525}</ProjectGuid>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>MCPU_MASTER</RootNamespace>

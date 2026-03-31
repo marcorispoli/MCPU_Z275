@@ -1,8 +1,10 @@
 #pragma once
 #include <Windows.h>
 #include "PCB303.h"
+#include "PCB335.h"
+#include "PCB336.h"
 #include "ConfigurationFiles.h"
-#include "Generator.h"
+
 
 /// <summary>
 /// \defgroup Exposure_Module Exposure Module
@@ -21,8 +23,7 @@ using namespace System::Threading;
 /// </summary>
 /// 
 /// \ingroup Exposure_Module
-ref class Exposures : public Generator
-{
+public ref class Exposures {
 public:
 
     literal unsigned char  FOCUS_LARGE = 0;
@@ -311,12 +312,12 @@ public:
     /// </summary>
     enum class exposure_completed_errors
     {
-        XRAY_NO_ERRORS = (int)Generator::generator_errors::GEN_NO_ERRORS,			//!< No error code
-        XRAY_BUTTON_RELEASE = (int)Generator::generator_errors::GEN_BUTTON_RELEASE, //!< The X-Ray Button has been released  
-        XRAY_TIMEOUT = (int)Generator::generator_errors::GEN_TIMEOUT,			    //!< Timeout generator sequence
-        XRAY_COMMUNICATION_ERROR = (int)Generator::generator_errors::GEN_COMMUNICATION_ERROR,         //!< A generator command is failed        
-        XRAY_INVALID_GENERATOR_STATUS = (int)Generator::generator_errors::GEN_INVALID_STATUS,//!< The generator is in a not expected status	
-        XRAY_ERR_CODE = (int)Generator::generator_errors::GEN_LAST_ERRCODE,         //!< Initialize the ExposureModule error codes        
+        XRAY_NO_ERRORS = 0,			//!< No error code
+        XRAY_BUTTON_RELEASE, //!< The X-Ray Button has been released  
+        XRAY_TIMEOUT,			    //!< Timeout generator sequence
+        XRAY_COMMUNICATION_ERROR,         //!< A generator command is failed        
+        XRAY_INVALID_GENERATOR_STATUS,//!< The generator is in a not expected status	
+        XRAY_ERR_CODE,         //!< Initialize the ExposureModule error codes        
         XRAY_INVALID_2D_PARAMETERS,	//!< The pexposure parameters for 2D are incorrect
         XRAY_INVALID_TOMO_PARAMETERS,	//!< The Tomo parameters has not been validated (selected)        
         XRAY_TIMEOUT_TILT_IN_HOME,	//!< Timeout waiting for the Tilt to be ready for home positioning 
@@ -354,8 +355,8 @@ public:
 
    
 
-    static void startSimulator(void) { getDevice()->startSimulatorMode(); }
-    static void startGenerator(void) { getDevice()->startNormalMode(); }
+    static void startSimulator(void) {  }
+    static void startGenerator(void) { }
 
     static void inline setExposureType(exposure_type_options exp) { exposure_type = exp; }
     static exposure_type_options inline getExposureType(void) { return exposure_type; }

@@ -1,9 +1,9 @@
 #include "ExposureModule.h"
 #include "awsProtocol.h"
-#include "Generator.h"
-#include "R2CP_Eth.h"
-#include "CaDataDicGen.h"
+
 #include "PCB304.h"
+#include "PCB335.h"
+#include "PCB336.h"
 #include "PCB301.h"
 #include "PCB303.h"
 #include "TiltMotor.h"
@@ -111,8 +111,8 @@ Exposures::exposure_completed_errors Exposures::man_3d_exposure_procedure(bool d
     exposure_data_str = "Ramp-Dec:" + Exposures::getTomoExposure()->tomo_acc; LogClass::logInFile(exposure_data_str);
     
     
-    error = (exposure_completed_errors)generator3DPulsePreparation(ExpName, Exposures::getExposurePulse(0)->kV, Exposures::getExposurePulse(0)->mAs, Exposures::getTomoExposure()->tomo_samples, Exposures::getTomoExposure()->tomo_skip, large_focus, 25, exposure_time);
-    if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
+    //error = (exposure_completed_errors)generator3DPulsePreparation(ExpName, Exposures::getExposurePulse(0)->kV, Exposures::getExposurePulse(0)->mAs, Exposures::getTomoExposure()->tomo_samples, Exposures::getTomoExposure()->tomo_skip, large_focus, 25, exposure_time);
+    //if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
 
 
     // Waits the Tilt completion
@@ -146,7 +146,7 @@ Exposures::exposure_completed_errors Exposures::man_3d_exposure_procedure(bool d
     if (!demo) {
 
         // Longer Timeout: the generator checks for the correct seqeunce here
-        error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
+        //error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
         setXrayEnable(false);
 
         // The index is the number associated to the Databank in the procedure definition. It is not the Databank index value itself!!
@@ -297,8 +297,8 @@ Exposures::exposure_completed_errors Exposures::aec_3d_exposure_procedure(bool d
     exposure_data_str += "Pre-Pulse Data:" + "\n";
     exposure_data_str += "Filter:" + Exposures::getExposurePulse(0)->filter.ToString(); LogClass::logInFile(exposure_data_str);
 
-    error = (exposure_completed_errors) generator3DAecPrePulsePreparation(ExpName, Exposures::getExposurePulse(0)->kV, Exposures::getExposurePulse(0)->mAs, large_focus, exposure_time_pre);
-    if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
+    //error = (exposure_completed_errors) generator3DAecPrePulsePreparation(ExpName, Exposures::getExposurePulse(0)->kV, Exposures::getExposurePulse(0)->mAs, large_focus, exposure_time_pre);
+    //if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
 
 
     // Waits the Tilt completion
@@ -325,7 +325,7 @@ Exposures::exposure_completed_errors Exposures::aec_3d_exposure_procedure(bool d
     if (!demo) {
 
         // Longer Timeout: the generator checks for the correct seqeunce here
-        error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
+        //error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
       
         // The index is the number associated to the Databank in the procedure definition. It is not the Databank index value itself!!
         if (large_focus) setExposedData(1, (unsigned char)0, getExposurePulse(0)->filter, 1);
@@ -370,14 +370,14 @@ Exposures::exposure_completed_errors Exposures::aec_3d_exposure_procedure(bool d
 
     
     // 3D Pulse Data Setup
-    error = (exposure_completed_errors)generator3DAecPulsePreparation(ExpName, Exposures::getExposurePulse(1)->kV, Exposures::getExposurePulse(1)->mAs, Exposures::getTomoExposure()->tomo_samples, Exposures::getTomoExposure()->tomo_skip, large_focus, 25, exposure_time);
-    if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
+    //error = (exposure_completed_errors)generator3DAecPulsePreparation(ExpName, Exposures::getExposurePulse(1)->kV, Exposures::getExposurePulse(1)->mAs, Exposures::getTomoExposure()->tomo_samples, Exposures::getTomoExposure()->tomo_skip, large_focus, 25, exposure_time);
+    //if (error != Exposures::exposure_completed_errors::XRAY_NO_ERRORS) return error;
 
 
     if (!demo) {
 
         // Longer Timeout: the generator checks for the correct seqeunce here
-        error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
+        //error = (exposure_completed_errors)generatorExecutePulseSequence(ExpName, 40000);
         setXrayEnable(false);
 
         // The index is the number associated to the Databank in the procedure definition. It is not the Databank index value itself!!

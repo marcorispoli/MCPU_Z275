@@ -7,11 +7,10 @@
 #include "ConfigurationFiles.h"
 
 #include "CanOpenMotor.h"
-#include "BodyMotor.h"
+
 #include "TiltMotor.h"
 #include "ArmMotor.h"
 #include "VerticalMotor.h"
-#include "SlideMotor.h"
 #include "CanDriver.h"
 #include "PCB301.h"
 #include "PCB302.h"
@@ -19,6 +18,10 @@
 #include "PCB304.h"
 #include "PCB325.h"
 #include "PCB326.h"
+#include "PCB334.h"
+#include "PCB335.h"
+#include "PCB336.h"
+
 #include "ExposureModule.h"
 #include "Log.h"
 
@@ -73,8 +76,11 @@ void StartupOperatingModeForm::MainFormInitialize(void) {
 	LogClass::logInFile("FW303 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW303]);
 	LogClass::logInFile("FW304 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW304]);
 	LogClass::logInFile("FW325 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW325]);
+	LogClass::logInFile("FW326 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW326]);
+	LogClass::logInFile("FW334 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW334]);
+	LogClass::logInFile("FW335 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW335]);
+	LogClass::logInFile("FW336 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW336]);
 	LogClass::logInFile("FW-CAN Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FWCAN]);
-	LogClass::logInFile("FW-GENERATOR Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FWGEN]);
 
 	
 	// Initialize the Activities
@@ -84,14 +90,14 @@ void StartupOperatingModeForm::MainFormInitialize(void) {
 	labelPcb304Activity->Text = "Waiting ..";
 	labelPcb325Activity->Text = "Waiting ..";
 	labelPcb326Activity->Text = "Waiting ..";
+	labelPcb334Activity->Text = "Waiting ..";
+	labelPcb335Activity->Text = "Waiting ..";
+	labelPcb336Activity->Text = "Waiting ..";
+
 	labelCanDriverActivity->Text = "Waiting ..";
-	labelGeneratorActivity->Text = "Waiting ..";
-	labelShActivity->Text = "Waiting ..";
 
 	labelMotorArmActivity->Text = "Waiting ..";
 	labelMotorTiltActivity->Text = "Waiting ..";
-	labelMotorBodyActivity->Text = "Waiting ..";
-	labelMotorShiftActivity->Text = "Waiting ..";
 	labelMotorUpDownActivity->Text = "Waiting ..";
 
 	startupFase = 0;
@@ -580,74 +586,136 @@ bool StartupOperatingModeForm::Startup_PCB326(void) {
 	return false;
 }
 
-/// <summary>
-/// \ingroup STARTUPIMPL
-/// This procedure executes the startup of the MotorBody module.
-///  
-/// </summary>
-/// 
-/// The procedure determines if the module 
-/// shall be activated as simulated mode or Normal mode. 
-/// 
-/// After the device module is started this procedure 
-/// waits for the process initialization completion.
-/// 
-/// The procedure is called by the window timer 
-/// every 100ms and handles the steps with a status machine approach.
-/// 
-///  
-/// <param name=""></param>
-/// <returns>
-/// + true: the initialization is successfully terminated;
-/// + false: the initialization is in progress;
-/// 
-/// \remarks
-/// In case of an error should be detected, 
-/// the global variable StartupOperatingModeForm::startupError is set to true;
-///  
-/// </returns>
-bool StartupOperatingModeForm::Startup_MotorBody(void) {
+
+bool StartupOperatingModeForm::Startup_PCB334(void) {
 	System::String^ string;
+
 
 	switch (startupSubFase) {
 
-	case 0: // Creates the Body Motor controller process
-		labelMotorBodyActivity->Text = "CONNECTION ..";
-		string = "Motor Body initialization ..";	
+	case 0: // Creates the PCB315 process
+		labelPcb334Activity->Text = "CONNECTION ..";
+		string = "pcb334 initialization ..";
 		LogClass::logInFile(string);
-
-		if (Gantry::isMotorBodyDemo()) BodyMotor::device->demoMode();
-		else BodyMotor::device->runMode();
+		if (Gantry::isPcb334Demo()) PCB334::device->simulMode();
+		else PCB334::device->runMode();
 		startupSubFase++;
 		break;
 
-	case 1: // Wait the connection and configuration		
-		if (!BodyMotor::device->activateConfiguration()) break;
-
-		labelMotorBodyActivity->Text = "CONFIGURATION ..";
-		string = "motor body status:" + BodyMotor::device->getInternalStatusStr();
-		LogClass::logInFile(string);
-		startupSubFase++;
-		break;
-
-	case 2: // Wait the connection and configuration
-		if (BodyMotor::device->isConfigurating()) break;
-		if ((!BodyMotor::device->isODConfigured()) || (!BodyMotor::device->isNanojConfigured())) {
-			startupError = true;
-			labelMotorBodyActivity->Text = "CONFIGURATION ERROR";
-			labelMotorBodyActivity->ForeColor = Color::Red;
-			string = "";
-			if (!BodyMotor::device->isODConfigured()) string += "Motor Body Object Dictionary initialization Failed\n";
-			if (!BodyMotor::device->isNanojConfigured()) string += "Motor Body Nanoj initialization Failed\n";
-			LogClass::logInFile(string);
+	case 1: // Wait the connection and configuration
+		if (PCB334::device->isSimulatorMode()) {
+			labelPcb334Activity->Text = "RUN IN SIMULATION MODE";
+			labelPcb334Activity->ForeColor = Color::LightGreen;
 			return true;
 		}
-		
-		if (BodyMotor::device->isSimulatorMode()) labelMotorBodyActivity->Text = "RUN IN SIMULATION MODE";
-		else labelMotorBodyActivity->Text = "RUN IN NORMAL MODE";
-		labelMotorBodyActivity->ForeColor = Color::LightGreen;
-		return true;
-		
+
+		if (PCB334::device->getModuleStatus() > CanDeviceProtocol::status_options::WAITING_REVISION) {
+			labelPcb334Activity->Text = "CONFIGURATION ..";
+			string = "pcb334 firmware revision: ";
+			string += " BOOT:" + PCB334::device->getBootStatus().ToString() + ", REV:" + PCB334::device->getBootRevision();
+			string += " APP:" + PCB334::device->getAppRevision();
+			LogClass::logInFile(string);
+			startupSubFase++;
+		}
+		break;
+
+	case 2: // Wait the connection and configuration		
+		if (PCB334::device->getModuleStatus() == CanDeviceProtocol::status_options::DEVICE_RUNNING) {
+			labelPcb334Activity->Text = "RUN IN NORMAL MODE";
+			labelPcb334Activity->ForeColor = Color::LightGreen;
+			return true;
+		}
+
+		break;
+
+	}
+	return false;
+}
+
+bool StartupOperatingModeForm::Startup_PCB335(void) {
+	System::String^ string;
+
+
+	switch (startupSubFase) {
+
+	case 0: // Creates the PCB315 process
+		labelPcb335Activity->Text = "CONNECTION ..";
+		string = "pcb335 initialization ..";
+		LogClass::logInFile(string);
+		if (Gantry::isPcb335Demo()) PCB335::device->simulMode();
+		else PCB335::device->runMode();
+		startupSubFase++;
+		break;
+
+	case 1: // Wait the connection and configuration
+		if (PCB335::device->isSimulatorMode()) {
+			labelPcb335Activity->Text = "RUN IN SIMULATION MODE";
+			labelPcb335Activity->ForeColor = Color::LightGreen;
+			return true;
+		}
+
+		if (PCB335::device->getModuleStatus() > CanDeviceProtocol::status_options::WAITING_REVISION) {
+			labelPcb335Activity->Text = "CONFIGURATION ..";
+			string = "pcb335 firmware revision: ";
+			string += " BOOT:" + PCB335::device->getBootStatus().ToString() + ", REV:" + PCB335::device->getBootRevision();
+			string += " APP:" + PCB335::device->getAppRevision();
+			LogClass::logInFile(string);
+			startupSubFase++;
+		}
+		break;
+
+	case 2: // Wait the connection and configuration		
+		if (PCB335::device->getModuleStatus() == CanDeviceProtocol::status_options::DEVICE_RUNNING) {
+			labelPcb335Activity->Text = "RUN IN NORMAL MODE";
+			labelPcb335Activity->ForeColor = Color::LightGreen;
+			return true;
+		}
+
+		break;
+
+	}
+	return false;
+}
+
+bool StartupOperatingModeForm::Startup_PCB336(void) {
+	System::String^ string;
+
+
+	switch (startupSubFase) {
+
+	case 0: // Creates the PCB315 process
+		labelPcb336Activity->Text = "CONNECTION ..";
+		string = "pcb336 initialization ..";
+		LogClass::logInFile(string);
+		if (Gantry::isPcb336Demo()) PCB336::device->simulMode();
+		else PCB336::device->runMode();
+		startupSubFase++;
+		break;
+
+	case 1: // Wait the connection and configuration
+		if (PCB336::device->isSimulatorMode()) {
+			labelPcb336Activity->Text = "RUN IN SIMULATION MODE";
+			labelPcb336Activity->ForeColor = Color::LightGreen;
+			return true;
+		}
+
+		if (PCB336::device->getModuleStatus() > CanDeviceProtocol::status_options::WAITING_REVISION) {
+			labelPcb336Activity->Text = "CONFIGURATION ..";
+			string = "pcb336 firmware revision: ";
+			string += " BOOT:" + PCB336::device->getBootStatus().ToString() + ", REV:" + PCB336::device->getBootRevision();
+			string += " APP:" + PCB336::device->getAppRevision();
+			LogClass::logInFile(string);
+			startupSubFase++;
+		}
+		break;
+
+	case 2: // Wait the connection and configuration		
+		if (PCB336::device->getModuleStatus() == CanDeviceProtocol::status_options::DEVICE_RUNNING) {
+			labelPcb336Activity->Text = "RUN IN NORMAL MODE";
+			labelPcb336Activity->ForeColor = Color::LightGreen;
+			return true;
+		}
+
 		break;
 
 	}
@@ -806,82 +874,6 @@ bool StartupOperatingModeForm::Startup_MotorArm(void) {
 
 /// <summary>
 /// \ingroup STARTUPIMPL
-/// This procedure executes the startup of the MotorShift module.
-///  
-/// </summary>
-/// 
-/// The procedure determines if the module 
-/// shall be activated as simulated mode or Normal mode. 
-/// 
-/// After the device module is started this procedure 
-/// waits for the process initialization completion.
-/// 
-/// The procedure is called by the window timer 
-/// every 100ms and handles the steps with a status machine approach.
-/// 
-///  
-/// <param name=""></param>
-/// <returns>
-/// + true: the initialization is successfully terminated;
-/// + false: the initialization is in progress;
-/// 
-/// \remarks
-/// In case of an error should be detected, 
-/// the global variable StartupOperatingModeForm::startupError is set to true;
-///  
-/// </returns>
-bool StartupOperatingModeForm::Startup_MotorShift(void) {
-	System::String^ string;
-
-	switch (startupSubFase) {
-
-	case 0: // Creates the Body Motor controller process
-		labelMotorShiftActivity->Text = "CONNECTION ..";
-		string = "Motor Slide initialization ..";	
-		LogClass::logInFile(string);
-		if (Gantry::isMotorSlideDemo()) SlideMotor::device->demoMode();
-		else SlideMotor::device->runMode();
-
-		startupSubFase++;
-		break;
-
-	case 1: // Wait the connection and configuration
-		if (!SlideMotor::device->activateConfiguration()) break;
-		
-
-		labelMotorShiftActivity->Text = "CONFIGURATION ..";
-		string = "Motor Slide status:" + SlideMotor::device->getInternalStatusStr();
-		LogClass::logInFile(string);
-		startupSubFase++;
-		break;
-
-	case 2: // Wait the connection and configuration
-		if (SlideMotor::device->isConfigurating()) break;
-		if ((!SlideMotor::device->isODConfigured()) || (!SlideMotor::device->isNanojConfigured())) {
-			startupError = true;
-			labelMotorShiftActivity->Text = "CONFIGURATION ERROR";
-			labelMotorShiftActivity->ForeColor = Color::Red;
-			string = "";
-			if (!SlideMotor::device->isODConfigured()) string += "Motor Slide Object Dictionary initialization Failed\n";
-			if (!SlideMotor::device->isNanojConfigured()) string += "Motor Slide Nanoj initialization Failed\n";
-			LogClass::logInFile(string);
-
-			return true;
-		}
-
-		if (SlideMotor::device->isSimulatorMode()) labelMotorShiftActivity->Text = "RUN IN SIMULATION MODE";
-		else labelMotorUpDownActivity->Text = "RUN IN NORMAL MODE";
-		labelMotorShiftActivity->ForeColor = Color::LightGreen;
-		return true;
-
-		break;
-
-	}
-	return false;
-}
-
-/// <summary>
-/// \ingroup STARTUPIMPL
 /// This procedure executes the startup of the MotorVertical module.
 ///  
 /// </summary>
@@ -958,92 +950,6 @@ bool StartupOperatingModeForm::Startup_MotorVertical(void) {
 
 /// <summary>
 /// \ingroup STARTUPIMPL
-/// This procedure executes the startup of the Generator module.
-///  
-/// </summary>
-/// 
-/// The procedure determines if the module 
-/// shall be activated as simulated mode or Normal mode. 
-/// 
-/// After the device module is started this procedure 
-/// waits for the process initialization completion.
-/// 
-/// The procedure is called by the window timer 
-/// every 100ms and handles the steps with a status machine approach.
-/// 
-///  
-/// <param name=""></param>
-/// <returns>
-/// + true: the initialization is successfully terminated;
-/// + false: the initialization is in progress;
-/// 
-/// \remarks
-/// In case of an error should be detected, 
-/// the global variable StartupOperatingModeForm::startupError is set to true;
-///  
-/// </returns>
-bool StartupOperatingModeForm::Startup_Generator(void) {
-	System::String^ string;
-
-	switch (startupSubFase) {
-
-	case 0: 
-
-		if (Gantry::isGeneratorDemo()) {
-			Exposures::startSimulator();
-			return true;
-		}
-		else Exposures::startGenerator();
-
-		// Smart Hub Connection
-		labelShActivity->Text = "WAIT SMART HUB CONNECTION..";
-		string = "Generator: connection with SH ..\n";
-		LogClass::logInFile(string);
-		startupSubFase++;
-		break;
-
-	case 1: // Wait Generator connection
-		if (!Exposures::isSmartHubConnected()) break;
-		labelShActivity->Text = "CONNECTED AND RUNNING";
-		labelShActivity->ForeColor = Color::LightGreen;
-
-		labelGeneratorActivity->Text = "WAIT GENERATOR CONNECTION..";
-		string = "Generator: connection with generator ..";
-		LogClass::logInFile(string);
-		startupSubFase++;
-		break;
-
-	case 2: // Wait Generator setup
-		if (!Exposures::isGeneratorConnected()) break;
-		labelGeneratorActivity->Text = "WAIT GENERATOR SETUP..";
-		string = "Generator: setup protocol ..";
-		LogClass::logInFile(string);
-		startupSubFase++;
-		break;
-
-	case 3: // Wait Generator Idle	
-		if (Exposures::isFatalError()) {
-			labelGeneratorActivity->Text = "FATAL ERROR:DC BUS ERROR";
-			labelGeneratorActivity->ForeColor = Color::Red;
-			return true;
-		}
-
-		if (!Exposures::isGeneratorIdle()) break;
-		startupSubFase++;
-		break;
-
-	case 4: // Wait Generator Idle
-		labelGeneratorActivity->Text = "RUN IN NORMAL MODE";
-		labelGeneratorActivity->ForeColor = Color::LightGreen;
-		
-		return true;
-	}
-
-	return false;
-}
-
-/// <summary>
-/// \ingroup STARTUPIMPL
 /// This procedure is called by the window timer
 /// and handles the initialization process sequence.
 /// 
@@ -1080,17 +986,17 @@ void StartupOperatingModeForm::StartupProcedure(void) {
 		INITSEQ = 0,
 		CANSEQ,		
 		PCB301SEQ,
+		PCB334SEQ,
 		PCB302SEQ,
 		PCB303SEQ,
 		PCB304SEQ,
 		PCB325SEQ,
 		PCB326SEQ,
-		GENSEQ,
+		PCB335SEQ,
+		PCB336SEQ,
 		VERTSEQ,
 		TILTSEQ,
 		ARMSEQ,
-		SLIDESEQ,
-		BODYSEQ,		
 		FINESEQ
 	};
 
@@ -1103,11 +1009,11 @@ void StartupOperatingModeForm::StartupProcedure(void) {
 	case PCB304SEQ: if (Startup_PCB304())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB304 process
 	case PCB325SEQ: if (Startup_PCB325())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB325 process
 	case PCB326SEQ: if (Startup_PCB326())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB326 process
-	case GENSEQ:	if (Startup_Generator())	{ startupFase++; startupSubFase = 0; } break; // Startup of the Generator process
+	case PCB334SEQ: if (Startup_PCB334())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB334 process
+	case PCB335SEQ: if (Startup_PCB335())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB335 process
+	case PCB336SEQ: if (Startup_PCB336())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB336 process
 	case VERTSEQ:	if (Startup_MotorVertical()) { startupFase++; startupSubFase = 0; } break; // Startup of the Vertical Motor body process
 	case ARMSEQ:	if (Startup_MotorArm())		{ startupFase++; startupSubFase = 0; } break; // Startup of the Arm Motor  process
-	case SLIDESEQ:	if (Startup_MotorShift())	{ startupFase++; startupSubFase = 0; } break; // Startup of the Slide Motor body process
-	case BODYSEQ:	if (Startup_MotorBody())	{ startupFase++; startupSubFase = 0; } break; // Startup of the Body Motor body process
 	case TILTSEQ:	if (Startup_MotorTilt())	{ startupFase++; startupSubFase = 0; } break; // Startup of the Tilt Motor body process	
 	case FINESEQ:	startupCompleted = true; break;
 	}
