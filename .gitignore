@@ -1,0 +1,13 @@
+*.exe
+*.o
+*.debug
+*.release
+*.Debug
+*.Release
+**/html
+**/OLDGEN
+*.html
+*.lnk
+**/x64
+.vs/
+**/GENERATED
