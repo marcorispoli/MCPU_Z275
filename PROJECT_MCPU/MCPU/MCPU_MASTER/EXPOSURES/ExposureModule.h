@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include "PCB303.h"
-#include "PCB335.h"
 #include "PCB336.h"
 #include "ConfigurationFiles.h"
 
@@ -357,6 +356,7 @@ public:
 
     static void startSimulator(void) {  }
     static void startGenerator(void) { }
+    static bool isSimulatorMode(void) { return false; }
 
     static void inline setExposureType(exposure_type_options exp) { exposure_type = exp; }
     static exposure_type_options inline getExposureType(void) { return exposure_type; }

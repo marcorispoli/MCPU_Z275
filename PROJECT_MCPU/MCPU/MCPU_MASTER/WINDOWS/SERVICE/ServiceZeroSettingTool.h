@@ -74,10 +74,8 @@ public:
 	// Common items for the service dialog
 	private:void formInitialization(void);
 	private: void onTargetSelectionCallback(System::String^ value);
-	private: void onBodyPanelTimerCallback(void);
 	private: void onTiltPanelTimerCallback(void);
 	private: void onVerticalPanelTimerCallback(void);
-	private: void onSlidePanelTimerCallback(void);
 	private: void onArmPanelTimerCallback(void);
 
 	private: System::Windows::Forms::Label^ serviceMenuTitle;
@@ -366,7 +364,6 @@ private:
 		this->zeroSettingSlide->Size = System::Drawing::Size(165, 165);
 		this->zeroSettingSlide->TabIndex = 23;
 		this->zeroSettingSlide->TabStop = false;
-		this->zeroSettingSlide->Click += gcnew System::EventHandler(this, &ServiceZeroSettingTool::zeroSettingSlide_Click);
 		// 
 		// zeroSettingTilt
 		// 
@@ -414,7 +411,6 @@ private:
 		this->zeroSettingBody->Size = System::Drawing::Size(165, 165);
 		this->zeroSettingBody->TabIndex = 19;
 		this->zeroSettingBody->TabStop = false;
-		this->zeroSettingBody->Click += gcnew System::EventHandler(this, &ServiceZeroSettingTool::zeroSettingBody_Click);
 		// 
 		// serviceCanc
 		// 
@@ -519,11 +515,9 @@ private:
 	private: System::Void cancButton_Click(System::Object^ sender, System::EventArgs^ e);
 
 	// Calibration - Zero Setting Panel
-	private: System::Void zeroSettingBody_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void zeroSettingVertical_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void zeroSettingArm_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void zeroSettingTilt_Click(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void zeroSettingSlide_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void targetSelection_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void runButton_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void manButton_Click(System::Object^ sender, System::EventArgs^ e);

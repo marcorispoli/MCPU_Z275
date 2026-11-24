@@ -7,8 +7,6 @@
 #include "ArmMotor.h"
 #include "VerticalMotor.h"
 #include "TiltMotor.h"
-#include "BodyMotor.h"
-#include "SlideMotor.h"
 #include "../WINDOWS/ConfirmationWindow.h"
 
 
@@ -57,8 +55,6 @@ static int selected_target;
 #define BODY_SELECTED_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\BodySelected.PNG")
 #define TILT_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\Tilt.PNG")
 #define TILT_SELECTED_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\TiltSelected.PNG")
-#define SLIDE_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\Slide.PNG")
-#define SLIDE_SELECTED_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\SlideSelected.PNG")
 #define MANUAL_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\Manual.PNG")
 #define MANUAL_SELECTED_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\ManualSelected.PNG")
 #define SELECTION_ICON Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\SelectionIcon.PNG")
@@ -69,8 +65,7 @@ static int selected_target;
 #define BODY_VIEW_MANUAL_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\BodyViewManual.PNG")
 #define TILT_VIEW_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\TiltView.PNG")
 #define TILT_VIEW_MANUAL_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\TiltViewManual.PNG")
-#define SLIDE_VIEW_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\SlideView.PNG")
-#define SLIDE_VIEW_MANUAL_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\SlideViewManual.PNG")
+
 
 
 typedef enum {
@@ -107,7 +102,6 @@ void ServiceRotationTool::formInitialization(void) {
 	rotationToolArmButton->BackColor = Color::Transparent;
 	rotationToolTiltButton->BackColor = Color::Transparent;
 	rotationToolBodyButton->BackColor = Color::Transparent;
-	rotationToolSlideButton->BackColor = Color::Transparent;
 	rotationToolManualButton->BackColor = Color::Transparent;
 
 	rotationToolSelectAngle1->BackColor = Color::Transparent;
@@ -141,7 +135,6 @@ void ServiceRotationTool::initPanel(void) {
 	rotationToolArmButton->BackgroundImage = ARM_IMAGE;
 	rotationToolTiltButton->BackgroundImage = TILT_IMAGE;
 	rotationToolBodyButton->BackgroundImage = BODY_IMAGE;
-	rotationToolSlideButton->BackgroundImage = SLIDE_IMAGE;
 
 	manual_mode = false;
 	Gantry::setManualRotationMode(Gantry::manual_rotation_options::GANTRY_STANDARD_STATUS_MANUAL_ROTATION);
@@ -198,20 +191,12 @@ void ServiceRotationTool::timerManagement(void) {
 	else if (current_rotation_selected == rotation_tool_selection::TILT_SELECTED) {
 		rotationToolTargetAngle->Text = (TiltMotor::device->getCurrentPosition() / 100).ToString();
 	}
-	else if (current_rotation_selected == rotation_tool_selection::BODY_SELECTED) {
-		rotationToolTargetAngle->Text = (BodyMotor::device->getCurrentPosition() / 10).ToString();
-	}
-	else if (current_rotation_selected == rotation_tool_selection::SLIDE_SELECTED) {
-		rotationToolTargetAngle->Text = (SlideMotor::device->getCurrentPosition() / 100).ToString();
-	}
 
 	// Command completion
 	if (current_rotation_command) {
 		if (
 			(!ArmMotor::device->isBusy()) &&
-			(!TiltMotor::device->isBusy()) &&
-			(!BodyMotor::device->isBusy()) &&
-			(!SlideMotor::device->isBusy())
+			(!TiltMotor::device->isBusy()) 
 			) current_rotation_command = rotation_commands::NO_COMMAND;
 	}
 
@@ -240,10 +225,8 @@ System::Void ServiceRotationTool::onServiceTimeout(Object^ source, System::Timer
 void ServiceRotationTool::cancButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (current_rotation_command != rotation_commands::NO_COMMAND) {
 		switch (current_rotation_command) {
-		case rotation_commands::BODY:BodyMotor::device->abortActivation(); break;
 		case rotation_commands::TILT:TiltMotor::device->abortActivation(); break;
 		case rotation_commands::ARM:ArmMotor::device->abortActivation(); break;
-		case rotation_commands::SLIDE:SlideMotor::device->abortActivation(); break;
 		}
 
 		// Reset of the current selection
@@ -275,7 +258,6 @@ System::Void ServiceRotationTool::rotationTool_arm_Click(System::Object^ sender,
 	rotationToolArmButton->BackgroundImage = ARM_SELECTED_IMAGE;
 	rotationToolBodyButton->BackgroundImage = BODY_IMAGE;
 	rotationToolTiltButton->BackgroundImage = TILT_IMAGE;
-	rotationToolSlideButton->BackgroundImage = SLIDE_IMAGE;
 
 
 	// Manual Mode disbaled
@@ -344,7 +326,6 @@ System::Void ServiceRotationTool::rotationTool_body_Click(System::Object^ sender
 	rotationToolArmButton->BackgroundImage = ARM_IMAGE;
 	rotationToolBodyButton->BackgroundImage = BODY_SELECTED_IMAGE;
 	rotationToolTiltButton->BackgroundImage = TILT_IMAGE;
-	rotationToolSlideButton->BackgroundImage = SLIDE_IMAGE;
 
 	// Manual Mode disabled
 	manual_mode = false;
@@ -406,7 +387,6 @@ System::Void ServiceRotationTool::rotationTool_tilt_Click(System::Object^ sender
 	rotationToolArmButton->BackgroundImage = ARM_IMAGE;
 	rotationToolBodyButton->BackgroundImage = BODY_IMAGE;
 	rotationToolTiltButton->BackgroundImage = TILT_SELECTED_IMAGE;
-	rotationToolSlideButton->BackgroundImage = SLIDE_IMAGE;
 
 	manual_mode = false;
 
@@ -447,61 +427,6 @@ System::Void ServiceRotationTool::rotationTool_tilt_Click(System::Object^ sender
 	rotationTooCreateInfoPanel(INFO_REASON_TILT_ACTIVATION);
 
 }
-System::Void ServiceRotationTool::rotationTool_slide_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (current_rotation_command != rotation_commands::NO_COMMAND) return;
-	rotationToolView->Hide();
-	rotationTool_select_item(nullptr);
-
-	current_rotation_selected = rotation_tool_selection::SLIDE_SELECTED;
-
-	this->rotationToolView->Location = System::Drawing::Point((600 - 543) / 2, 391);
-	this->rotationToolView->Size = System::Drawing::Size(543, 451);
-
-	this->rotationToolManualButton->Location = System::Drawing::Point(430, 50);
-
-	rotationToolTargetAngle->SetBounds(0, 0, 250, 100);
-	rotationToolTargetAngle->Location = System::Drawing::Point(30 + (543 - 250) / 2, ((450 - 100) / 2) - 40);
-
-	rotationToolArmButton->BackgroundImage = ARM_IMAGE;
-	rotationToolBodyButton->BackgroundImage = BODY_IMAGE;
-	rotationToolTiltButton->BackgroundImage = TILT_IMAGE;
-	rotationToolSlideButton->BackgroundImage = SLIDE_SELECTED_IMAGE;
-
-
-	manual_mode = false;
-
-	// RotationToolView setup
-	if (manual_mode)	rotationToolView->BackgroundImage = SLIDE_VIEW_MANUAL_IMAGE;
-	else rotationToolView->BackgroundImage = SLIDE_VIEW_IMAGE;
-
-	rotationToolTargetAngle->Show();
-
-	rotationToolSelectAngle1->Show(); // 0°
-	rotationToolSelectAngle1->Tag = "0";
-	rotationToolSelectAngle1->Location = System::Drawing::Point(27, 41);
-
-	rotationToolSelectAngle2->Show(); // 10°
-	rotationToolSelectAngle2->Tag = "10";
-	rotationToolSelectAngle2->Location = System::Drawing::Point(53, 152);
-
-	rotationToolSelectAngle3->Show(); // 90°
-	rotationToolSelectAngle3->Tag = "90";
-	rotationToolSelectAngle3->Location = System::Drawing::Point(350, 336);
-
-	rotationToolSelectAngle4->Hide();
-	rotationToolSelectAngle5->Hide();
-	rotationToolSelectAngle6->Hide();
-	rotationToolSelectAngle7->Hide();
-	rotationToolSelectAngle8->Hide();
-	rotationToolSelectAngle9->Hide();
-
-	rotationToolView->Show();
-
-	// Confirmation Panel Setup ____________________________________________________________
-	rotationTooCreateInfoPanel(INFO_REASON_SLIDE_ACTIVATION);
-
-
-}
 
 void ServiceRotationTool::rotationTooCreateInfoPanel(unsigned char reason) {
 	System::String^ confInfoTitle;
@@ -509,21 +434,6 @@ void ServiceRotationTool::rotationTooCreateInfoPanel(unsigned char reason) {
 	ConfirmationWindow^ errInfo;
 
 	switch (reason) {
-	case INFO_REASON_BODY_ACTIVATION:
-		confInfoTitle = "[" + Notify::TranslateNumber(Notify::messages::INFO_BODY_ACTIVATION_CONFIRMATION) + "] " + Notify::TranslateTitle(Notify::messages::INFO_BODY_ACTIVATION_CONFIRMATION);
-		confInfoContent = Notify::TranslateContent(Notify::messages::INFO_BODY_ACTIVATION_CONFIRMATION);
-		pConfirmation = gcnew ConfirmationWindow(this, ConfirmationWindow::InfoType::INF_WIN, confInfoTitle, confInfoContent);
-		((ConfirmationWindow^)pConfirmation)->button_canc_event += gcnew ConfirmationWindow::delegate_button_callback(this, &ServiceRotationTool::rotationToolSelectionCancCallback);
-		((ConfirmationWindow^)pConfirmation)->button_ok_event += gcnew ConfirmationWindow::delegate_button_callback(this, &ServiceRotationTool::rotationToolSelectionBodyOkCallback);
-
-		break;
-	case INFO_REASON_BODY_ERROR:
-		confInfoTitle = "[" + Notify::TranslateNumber(Notify::messages::INFO_BODY_ACTIVATION_FAILED) + "] " + Notify::TranslateTitle(Notify::messages::INFO_BODY_ACTIVATION_FAILED);
-		confInfoContent = Notify::TranslateContent(Notify::messages::INFO_BODY_ACTIVATION_FAILED);
-		errInfo = gcnew ConfirmationWindow(this, ConfirmationWindow::InfoType::ERR_WIN, confInfoTitle, confInfoContent);
-		errInfo->open();
-
-		break;
 	case INFO_REASON_ARM_ACTIVATION:
 		confInfoTitle = "[" + Notify::TranslateNumber(Notify::messages::INFO_ARM_ACTIVATION_CONFIRMATION) + "] " + Notify::TranslateTitle(Notify::messages::INFO_ARM_ACTIVATION_CONFIRMATION);
 		confInfoContent = Notify::TranslateContent(Notify::messages::INFO_ARM_ACTIVATION_CONFIRMATION);
@@ -553,21 +463,6 @@ void ServiceRotationTool::rotationTooCreateInfoPanel(unsigned char reason) {
 		errInfo = gcnew ConfirmationWindow(this, ConfirmationWindow::InfoType::ERR_WIN, confInfoTitle, confInfoContent);
 		errInfo->open();
 
-		break;
-	case INFO_REASON_SLIDE_ACTIVATION:
-		confInfoTitle = "[" + Notify::TranslateNumber(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION) + "] " + Notify::TranslateTitle(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION);
-		confInfoContent = Notify::TranslateContent(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION);
-
-		pConfirmation = gcnew ConfirmationWindow(this, ConfirmationWindow::InfoType::INF_WIN, confInfoTitle, confInfoContent);
-		((ConfirmationWindow^)pConfirmation)->button_canc_event += gcnew ConfirmationWindow::delegate_button_callback(this, &ServiceRotationTool::rotationToolSelectionCancCallback);
-		((ConfirmationWindow^)pConfirmation)->button_ok_event += gcnew ConfirmationWindow::delegate_button_callback(this, &ServiceRotationTool::rotationToolSelectionSlideOkCallback);
-
-		break;
-	case INFO_REASON_SLIDE_ERROR:
-		confInfoTitle = "[" + Notify::TranslateNumber(Notify::messages::INFO_SLIDE_ACTIVATION_FAILED) + "] " + Notify::TranslateTitle(Notify::messages::INFO_SLIDE_ACTIVATION_FAILED);
-		confInfoContent = Notify::TranslateContent(Notify::messages::INFO_SLIDE_ACTIVATION_FAILED);
-		errInfo = gcnew ConfirmationWindow(this, ConfirmationWindow::InfoType::ERR_WIN, confInfoTitle, confInfoContent);
-		errInfo->open();
 		break;
 
 	}
@@ -606,22 +501,6 @@ System::Void ServiceRotationTool::rotationTool_manual_Click(System::Object^ send
 		else rotationToolView->BackgroundImage = ARM_VIEW_IMAGE;
 
 	}
-	else if (current_rotation_selected == rotation_tool_selection::BODY_SELECTED) {
-		if (manual_mode) {
-			Gantry::setManualRotationMode(Gantry::manual_rotation_options::GANTRY_BODY_MANUAL_ROTATION);
-			rotationToolView->BackgroundImage = BODY_VIEW_MANUAL_IMAGE;
-		}
-		else rotationToolView->BackgroundImage = BODY_VIEW_IMAGE;
-
-	}
-	else if (current_rotation_selected == rotation_tool_selection::SLIDE_SELECTED) {
-		if (manual_mode) {
-			Gantry::setManualRotationMode(Gantry::manual_rotation_options::GANTRY_SLIDE_MANUAL_ROTATION);
-			rotationToolView->BackgroundImage = SLIDE_VIEW_MANUAL_IMAGE;
-		}
-		else rotationToolView->BackgroundImage = SLIDE_VIEW_IMAGE;
-
-	}
 }
 
 
@@ -657,33 +536,6 @@ void ServiceRotationTool::rotationToolSelectionTiltOkCallback(void) {
 	}
 }
 
-void ServiceRotationTool::rotationToolSelectionBodyOkCallback(void) {
-
-	// Busy condition
-	if (current_rotation_command) return;
-
-	if (BodyMotor::serviceAutoPosition(selected_target)) {
-		current_rotation_command = rotation_commands::BODY;
-	}
-	else {
-		rotationTool_select_item(nullptr);
-		rotationTooCreateInfoPanel(INFO_REASON_BODY_ERROR);
-	}
-}
-
-void ServiceRotationTool::rotationToolSelectionSlideOkCallback(void) {
-
-	// Busy condition
-	if (current_rotation_command) return;
-
-	if (SlideMotor::serviceAutoPosition(selected_target)) {
-		current_rotation_command = rotation_commands::SLIDE;
-	}
-	else {
-		rotationTool_select_item(nullptr);
-		rotationTooCreateInfoPanel(INFO_REASON_SLIDE_ERROR);
-	}
-}
 
 void ServiceRotationTool::rotationTool_select_item(System::Windows::Forms::PictureBox^ item) {
 

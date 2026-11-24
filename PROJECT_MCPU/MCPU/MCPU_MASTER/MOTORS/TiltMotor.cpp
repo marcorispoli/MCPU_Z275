@@ -1,8 +1,6 @@
 #include "ConfigurationFiles.h"
 #include "Notify.h"
 #include "TiltMotor.h"
-#include "SlideMotor.h"
-
 #include "PCB301.h"
 #include "pd4_od.h"
 #include "..\gantry_global_status.h"
@@ -272,19 +270,11 @@ bool TiltMotor::setTarget(target_options tg, int id) {
 
     case target_options::TOMO_H:
         if (!Exposures::getTomoExposure()->valid) return false;       
-        if ((!SlideMotor::isAllowedPosition())) {
-            LogClass::logInFile("TiltMotor::serviceAutoPosition() - command: error, slide not in allowed position ");
-            return false;
-        }        
-
+        
         angle = Exposures::getTomoExposure()->tomo_home;        
         break;
 
     case target_options::TOMO_E:
-        if ((!SlideMotor::isAllowedPosition())) {
-            LogClass::logInFile("TiltMotor::serviceAutoPosition() - command: error, slide not in allowed position ");
-            return false;
-        }
 
         if (!Exposures::getTomoExposure()->valid) return false;
         angle = Exposures::getTomoExposure()->tomo_end;
@@ -318,15 +308,6 @@ bool TiltMotor::setTarget(target_options tg, int id) {
     /// </returns>
 bool TiltMotor::serviceAutoPosition(int pos) {
     idle_positioning = false;
-    // Test on the Slide position
-    if ((pos > 15) || (pos < -15)) {
-
-        if ((!SlideMotor::isAllowedPosition())) {
-            LogClass::logInFile("TiltMotor::serviceAutoPosition() - command: error, slide not in allowed position ");
-            return false;
-        }
-    }
-
     return device->activateAutomaticPositioning(0, pos * 100, true);
 
 }
@@ -356,12 +337,7 @@ bool TiltMotor::serviceAutoPosition(int pos) {
 bool TiltMotor::activateTomoScan(int pos, int speed, int acc, int dec) { 
     idle_positioning = false;
 
-    // never allowed when slide is out of position
-    if ((!SlideMotor::isAllowedPosition())) {
-        LogClass::logInFile("activateTomoScan::serviceAutoPosition() - command: error, slide not in allowed position ");
-        return false;
-    }
-
+    
     pending_target = target_options::TOMO_E;
     tomo_scan = TiltMotor::device->activateAutomaticPositioning(0, pos, speed, acc, dec, false);
     return tomo_scan;
@@ -718,11 +694,7 @@ void TiltMotor::completedCallback(int id, MotorCommands current_command, int cur
         
 
         // Next step of the Idle positioning
-        if (idle_positioning) {
-            idle_positioning = false;
-            if (term_code == MotorCompletedCodes::COMMAND_SUCCESS)  SlideMotor::setIdlePosition();
-            return;
-        }
+        idle_positioning = false;
 
         // Notify the command termination event
         device->command_completed_event(id, (int) term_code);

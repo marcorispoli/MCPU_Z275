@@ -8,8 +8,6 @@
 #include "IconWindow.h"
 #include "VerticalMotor.h"
 #include "ArmMotor.h"
-#include "BodyMotor.h"
-#include "SlideMotor.h"
 #include "TiltMotor.h"
 #include "ExposureModule.h"
 #include "../DEVICES/PCB325.h"
@@ -29,9 +27,6 @@
 
 
 #define AEC_IMAGE Image::FromFile(Gantry::applicationResourcePath + "TestStudy\\aecSelection.PNG")
-
-#define SLIDE_0_IMAGE Image::FromFile(Gantry::applicationResourcePath + "TestStudy\\Slide0.PNG")
-#define SLIDE_10_IMAGE Image::FromFile(Gantry::applicationResourcePath + "TestStudy\\Slide10.PNG")
 
 #define INFO_BUTTON_ON Image::FromFile(Gantry::applicationResourcePath + "TestStudy\\InfoIcon.PNG")
 #define WARNING_BUTTON_ON Image::FromFile(Gantry::applicationResourcePath + "TestStudy\\WarningOn.PNG")
@@ -134,15 +129,6 @@ void TestStudy::formInitialization(void) {
 
 	mainPanel->SetBounds(0, 0, 600, 1024);
 	
-	
-	
-	// Confirmation Panel Setup ____________________________________________________________
-	System::String^ confInfoTitle = "[" + Notify::TranslateNumber(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION) + "] " + Notify::TranslateTitle(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION);
-	System::String^ confInfoContent = Notify::TranslateContent(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION);
-	pShiftConf = gcnew ConfirmationWindow(this, ConfirmationWindow::InfoType::INF_WIN, confInfoTitle, confInfoContent);
-	((ConfirmationWindow^)pShiftConf)->button_canc_event += gcnew ConfirmationWindow::delegate_button_callback(this, &TestStudy::onShiftConfirmCanc);
-	((ConfirmationWindow^)pShiftConf)->button_ok_event += gcnew ConfirmationWindow::delegate_button_callback(this, &TestStudy::onShiftConfirmOk);
-	
 	// AEC Panel creation	
 	pAec = gcnew aecSelectionDialog();
 
@@ -241,10 +227,6 @@ void TestStudy::initOperatingStatus(void) {
 	// initialize the evaluation function
 	evaluateCompressorStatus(true);
 
-	// init of the slide status view
-	evaluateSlideStatus(true);
-
-	
 
 	// Start the startup session	
 	operatingTimer->Start();		
@@ -554,26 +536,6 @@ void TestStudy::evaluateCollimatorStatus(void) {
 	}
 }
 
-void TestStudy::evaluateSlideStatus(bool init) {
-	static int stat = 255;
-	if (init) stat = 255;
-
-	int cur_stat;
-	if (SlideMotor::device->getCurrentPosition() < 500) cur_stat = 0;
-	else cur_stat = 1;
-	
-	if (stat != cur_stat) {
-		stat = cur_stat;
-
-		if(stat == 0)  slideButton->BackgroundImage = SLIDE_0_IMAGE;
-		else slideButton->BackgroundImage = SLIDE_10_IMAGE;
-	}
-
-	
-}
-
-
-
 void TestStudy::evaluateAwsComponentEvent(void) {
 	bool generate_event_component = false;
 	static PCB302::paddleCodes paddle = PCB302::paddleCodes::PADDLE_NOT_DETECTED;
@@ -611,9 +573,6 @@ void TestStudy::operatingStatusManagement(void) {
 	evaluateCompressorStatus(false);
 	
 	evaluateCollimatorStatus();
-	
-	evaluateSlideStatus(false);
-	
 	
 	evaluateGridStatus();
 	evaluateAwsComponentEvent();
@@ -677,33 +636,9 @@ void TestStudy::errorButton_Click(System::Object^ sender, System::EventArgs^ e) 
 }
 
 
-
-void TestStudy::ShiftSelection_Click(System::Object^ sender, System::EventArgs^ e) {
-	
-	// If a motorization is activated returns 
-	if (Gantry::isMotorsActive()) return;
-
-	((ConfirmationWindow^)pShiftConf)->setContentBackground(slideButton->BackgroundImage);
-	((ConfirmationWindow^)pShiftConf)->open();
-}
-
-
-
-
 void TestStudy::aecButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	
 	((aecSelectionDialog^)pAec)->open(this);
-}
-
-
-void TestStudy::onShiftConfirmOk(void) {
-
-	if (SlideMotor::device->getCurrentPosition() < 500) SlideMotor::isoAutoPosition(1000);
-	else SlideMotor::isoAutoPosition(0);
-	
-}
-void TestStudy::onShiftConfirmCanc(void) {
-	
 }
 
 
@@ -711,8 +646,6 @@ void TestStudy::evaluatePopupPanels(void) {
 #define TMO 20
 	static bool compression = false;
 	static bool arm = false;
-	static bool body = false;
-	static bool slide = false;
 	static bool vertical = false;
 	static bool tilt = false;
 	static int  timer = 0;
@@ -722,8 +655,6 @@ void TestStudy::evaluatePopupPanels(void) {
 		if(Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->close();
 		compression = false;
 		arm = false;
-		body = false;
-		slide = false;
 		vertical = false;
 		tilt = false;
 		timer = 0;
@@ -772,9 +703,7 @@ void TestStudy::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = true;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(COMPRESSING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_COMPRESSION_ACTIVATED), "(N)");
 			else Gantry::getValuePopupWindow()->open(this, COMPRESSING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_COMPRESSION_ACTIVATED), "(N)");
@@ -794,9 +723,7 @@ void TestStudy::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = false;
 			arm = true;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(ARM_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_ARM_ACTIVATED), "(°)");
 			else Gantry::getValuePopupWindow()->open(this, ARM_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_ARM_ACTIVATED), "(°)");
@@ -821,9 +748,7 @@ void TestStudy::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = false;
 			arm = false;
-			body = true;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(BODY_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_BODY_ACTIVATED), "(°)");
 			else Gantry::getValuePopupWindow()->open(this, BODY_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_BODY_ACTIVATED), "(°)");
@@ -847,9 +772,7 @@ void TestStudy::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = false;
 			arm = false;
-			body = false;
 			vertical = true;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(VERTICAL_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_VERTICAL_ACTIVATED), "(mm)");
 			else Gantry::getValuePopupWindow()->open(this, VERTICAL_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_VERTICAL_ACTIVATED), "(mm)");
@@ -868,41 +791,13 @@ void TestStudy::evaluatePopupPanels(void) {
 	}
 	
 	
-	if (!slide) {
-		// Compressor Window Initialization
-		if (SlideMotor::device->isRunning()) {
-			timer = TMO;
-			compression = false;
-			arm = false;
-			body = false;
-			vertical = false;
-			slide = true;
-			tilt = false;
-			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(SLIDE_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_SLIDE_ACTIVATED), "(°)");
-			else Gantry::getValuePopupWindow()->open(this, SLIDE_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_SLIDE_ACTIVATED), "(°)");
-
-			// Set the value to the current compression
-			int position = (int)SlideMotor::device->getCurrentPosition() / 100;
-			Gantry::getValuePopupWindow()->content(position.ToString());
-			return;
-		}
-	}
-	else {
-		// Set the value to the current compression
-		int position = (int)SlideMotor::device->getCurrentPosition() / 100;
-		Gantry::getValuePopupWindow()->content(position.ToString());
-		if (SlideMotor::device->isRunning()) timer = TMO;
-	}
-	
 	if (!tilt) {
 		// Compressor Window Initialization
 		if (TiltMotor::device->isRunning()) {
 			timer = TMO;
 			compression = false;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = true;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(TILT_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_TILT_ACTIVATED), "(.01°)");
 			else Gantry::getValuePopupWindow()->open(this, TILT_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_TILT_ACTIVATED), "(°)");
@@ -927,9 +822,7 @@ void TestStudy::evaluatePopupPanels(void) {
 		if (!timer) {
 			compression = false;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			Gantry::getValuePopupWindow()->close();			
 		}

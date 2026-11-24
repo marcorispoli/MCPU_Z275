@@ -197,9 +197,6 @@
     <ClInclude Include="DEVICES\PCB334.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DEVICES\PCB335.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DEVICES\PCB336.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -371,9 +368,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DEVICES\PCB334.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DEVICES\PCB335.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DEVICES\PCB336.cpp">

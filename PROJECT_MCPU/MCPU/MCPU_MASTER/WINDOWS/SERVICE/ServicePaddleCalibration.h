@@ -588,11 +588,8 @@ private:
 	private: System::Void OnPaddleCalibrationToolTimeout(Object^ source, System::Timers::ElapsedEventArgs^ e);
 	private: System::Void cancButton_Click(System::Object^ sender, System::EventArgs^ e);
 
-	// Calibration - Zero Setting Panel
-	private: System::Void zeroSettingBody_Click(System::Object^ sender, System::EventArgs^ e);
-	
-	private: System::Void zeroSettingTilt_Click(System::Object^ sender, System::EventArgs^ e);
-	
+	// Calibration - Zero Setting Panel	
+	private: System::Void zeroSettingTilt_Click(System::Object^ sender, System::EventArgs^ e);	
 	private: System::Void targetSelection_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void runButton_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void manButton_Click(System::Object^ sender, System::EventArgs^ e);

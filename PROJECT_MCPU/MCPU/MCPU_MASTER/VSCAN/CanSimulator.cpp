@@ -12,8 +12,6 @@
 #include "PCB326.h"
 #include "ArmMotor.h"
 #include "TiltMotor.h"
-#include "SlideMotor.h"
-#include "BodyMotor.h"
 #include "VerticalMotor.h"
 
 
@@ -132,10 +130,8 @@ void CanSimulator::sendConfiguration() {
 	// Motor Simulation Bit
 	buffer[(Byte)can_buf_struct::D1] = 0;
 	if (Gantry::isMotorVerticalDemo()) buffer[(Byte)can_buf_struct::D1] |= 1;
-	if (Gantry::isMotorBodyDemo()) buffer[(Byte)can_buf_struct::D1] |= 2;
 	if (Gantry::isMotorArmDemo()) buffer[(Byte)can_buf_struct::D1] |= 4;
 	if (Gantry::isMotorTiltDemo()) buffer[(Byte)can_buf_struct::D1] |= 8;
-	if (Gantry::isMotorSlideDemo()) buffer[(Byte)can_buf_struct::D1] |= 0x10;
 	
 	try {
 		device->clientSocket->Send(buffer);

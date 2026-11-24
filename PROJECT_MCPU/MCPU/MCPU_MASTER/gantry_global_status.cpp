@@ -81,7 +81,6 @@ void Gantry::initialize(void) {
         pcb325_simulator = false;
         pcb326_simulator = false;
         pcb334_simulator = false;
-        pcb335_simulator = false;
         pcb336_simulator = false;
         motor_tilt_simulator = false;
         motor_arm_simulator = false;
@@ -99,7 +98,6 @@ void Gantry::initialize(void) {
         pcb325_simulator = true;        // The PCB325 board shall be emulated
         pcb326_simulator = true;        // The PCB326 board shall be emulated
         pcb334_simulator = false;        // The PCB326 board shall be emulated
-        pcb335_simulator = true;        // The PCB326 board shall be emulated
         pcb336_simulator = true;        // The PCB326 board shall be emulated
         motor_tilt_simulator = false;   // Full operating
         motor_arm_simulator = false;    // Full Operating
@@ -218,14 +216,6 @@ void Gantry::initialize(void) {
             pcb334_simulator = true;
         }
 
-        if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_PCB335]) == 1) {
-            LogClass::logInFile("GANTRY: PCB335 IN NORMAL MODE ");
-            pcb335_simulator = false;
-        }
-        else {
-            LogClass::logInFile("GANTRY: PCB335 IN SYM MODE ");
-            pcb335_simulator = true;
-        }
 
         if (System::Convert::ToByte(SystemConfig::Configuration->getParam(param)[SystemConfig::SYM_MODE_PCB336]) == 1) {
             LogClass::logInFile("GANTRY: PCB336 IN NORMAL MODE ");

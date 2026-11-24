@@ -19,7 +19,6 @@
 #include "PCB325.h"
 #include "PCB326.h"
 #include "PCB334.h"
-#include "PCB335.h"
 #include "PCB336.h"
 
 #include "ExposureModule.h"
@@ -84,6 +83,8 @@ void StartupOperatingModeForm::MainFormInitialize(void) {
 
 	
 	// Initialize the Activities
+	labelCanDriverActivity->Text = "Waiting ..";
+
 	labelPcb301Activity->Text = "Waiting ..";
 	labelPcb302Activity->Text = "Waiting ..";
 	labelPcb303Activity->Text = "Waiting ..";
@@ -91,10 +92,8 @@ void StartupOperatingModeForm::MainFormInitialize(void) {
 	labelPcb325Activity->Text = "Waiting ..";
 	labelPcb326Activity->Text = "Waiting ..";
 	labelPcb334Activity->Text = "Waiting ..";
-	labelPcb335Activity->Text = "Waiting ..";
 	labelPcb336Activity->Text = "Waiting ..";
-
-	labelCanDriverActivity->Text = "Waiting ..";
+	labelPcb349Activity->Text = "Waiting ..";
 
 	labelMotorArmActivity->Text = "Waiting ..";
 	labelMotorTiltActivity->Text = "Waiting ..";
@@ -632,17 +631,18 @@ bool StartupOperatingModeForm::Startup_PCB334(void) {
 	return false;
 }
 
-bool StartupOperatingModeForm::Startup_PCB335(void) {
+/*
+bool StartupOperatingModeForm::Startup_PCB349(void) {
 	System::String^ string;
 
 
 	switch (startupSubFase) {
 
 	case 0: // Creates the PCB315 process
-		labelPcb335Activity->Text = "CONNECTION ..";
+		labelPcb349Activity->Text = "CONNECTION ..";
 		string = "pcb335 initialization ..";
 		LogClass::logInFile(string);
-		if (Gantry::isPcb335Demo()) PCB335::device->simulMode();
+		if (Gantry::isPcb349Demo()) PCB349::device->simulMode();
 		else PCB335::device->runMode();
 		startupSubFase++;
 		break;
@@ -676,7 +676,7 @@ bool StartupOperatingModeForm::Startup_PCB335(void) {
 	}
 	return false;
 }
-
+*/
 bool StartupOperatingModeForm::Startup_PCB336(void) {
 	System::String^ string;
 
@@ -1010,7 +1010,6 @@ void StartupOperatingModeForm::StartupProcedure(void) {
 	case PCB325SEQ: if (Startup_PCB325())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB325 process
 	case PCB326SEQ: if (Startup_PCB326())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB326 process
 	case PCB334SEQ: if (Startup_PCB334())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB334 process
-	case PCB335SEQ: if (Startup_PCB335())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB335 process
 	case PCB336SEQ: if (Startup_PCB336())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB336 process
 	case VERTSEQ:	if (Startup_MotorVertical()) { startupFase++; startupSubFase = 0; } break; // Startup of the Vertical Motor body process
 	case ARMSEQ:	if (Startup_MotorArm())		{ startupFase++; startupSubFase = 0; } break; // Startup of the Arm Motor  process

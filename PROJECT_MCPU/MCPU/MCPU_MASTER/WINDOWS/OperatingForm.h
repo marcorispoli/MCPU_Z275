@@ -37,15 +37,12 @@ public:
 private: System::Windows::Forms::Panel^ aecButton;
 private: System::Windows::Forms::Label^ labelAec;
 public:
-	Object^ pShiftConf;
 	void suspend(void);
 	void resume(void);
 	void onAbortConfirmOk(void);
 	void onAbortConfirmCanc(void);
 	void onConfirmOk(void);
 	void onConfirmCanc(void);
-	void onShiftConfirmOk(void);
-	void onShiftConfirmCanc(void);
 
 	void initOperatingStatus(void);
 	void operatingStatusManagement(void);
@@ -56,7 +53,6 @@ public:
 	void evaluateCollimatorStatus(void);
 	void evaluateMagStatus(void);
 	void evaluateDoorStatus(void);
-	void evaluateSlideStatus(bool init);
 	void evaluateProjectionStatus(bool init);
 	void evaluatePopupPanels(void);
 	void evaluateDigitDisplays(void);
@@ -470,7 +466,6 @@ private:
 		this->slideButton->Name = L"slideButton";
 		this->slideButton->Size = System::Drawing::Size(135, 135);
 		this->slideButton->TabIndex = 0;
-		this->slideButton->Click += gcnew System::EventHandler(this, &OperatingForm::ShiftSelection_Click);
 		// 
 		// collimationStatus
 		// 
@@ -562,7 +557,5 @@ private:
 	private: System::Void aecButton_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void errorButton_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void viewSelection_Click(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void ShiftSelection_Click(System::Object^ sender, System::EventArgs^ e);
-
 };
 

@@ -17,7 +17,6 @@
 #include "../DEVICES/PCB304.h"
 #include "../DEVICES/PCB326.h"
 #include "../DEVICES/PCB334.h"
-#include "../DEVICES/PCB335.h"
 #include "../DEVICES/PCB336.h"
 #include "awsProtocol.h"
 
@@ -197,6 +196,7 @@ void OperatingForm::formInitialization(void) {
 	
 
 	// Activate the Demo Icon if the Xrays are not 
+	/*
 	demoIcon->BackColor = Color::Transparent;
 	if (Gantry::isOperatingDemo()) {		
 		demoIcon->BackgroundImage = DEMO_IMAGE;
@@ -208,7 +208,7 @@ void OperatingForm::formInitialization(void) {
 	}
 	else {
 		demoIcon->Hide();
-	}
+	}*/
 
 	// Sets the current lamp status
 	OPERSTATUS::Registers.collimator.light_on= false;
@@ -304,8 +304,6 @@ void OperatingForm::initOperatingStatus(void) {
 	// initialize the evaluation function
 	evaluateCompressorStatus(true);
 
-	// init of the slide status view
-	evaluateSlideStatus(true);
 
 	// init of the projection status view
 	evaluateProjectionStatus(true);
@@ -737,7 +735,6 @@ void OperatingForm::operatingStatusManagement(void) {
 	evaluateCollimatorStatus();
 	evaluateMagStatus();
 	evaluateDoorStatus();
-	evaluateSlideStatus(false);
 	evaluateProjectionStatus(false);
 	evaluateDigitDisplays();
 	
@@ -809,18 +806,6 @@ void OperatingForm::viewSelection_Click(System::Object^ sender, System::EventArg
 		((ConfirmationWindow^)pAbort)->open();
 	}
 }
-
-
-void OperatingForm::ShiftSelection_Click(System::Object^ sender, System::EventArgs^ e) {
-	
-	// If a motorization is activated returns 
-	if (Gantry::isMotorsActive()) return;
-
-	((ConfirmationWindow^)pShiftConf)->setContentBackground(slideButton->BackgroundImage);
-	((ConfirmationWindow^)pShiftConf)->open();
-}
-
-
 
 void OperatingForm::lampButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	PCB303::setCollimationLight(true);
@@ -1011,9 +996,7 @@ void OperatingForm::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = false;
 			arm = false;
-			body = false;
-			vertical = true;
-			slide = false;
+			vertical = true;			
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(VERTICAL_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_VERTICAL_ACTIVATED), "(mm)");
 			else Gantry::getValuePopupWindow()->open(this, VERTICAL_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_VERTICAL_ACTIVATED), "(mm)");

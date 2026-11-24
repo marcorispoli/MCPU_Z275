@@ -1,5 +1,4 @@
 #include "ExposureModule.h"
-#include "Generator.h"
 #include <thread>
 
 using namespace System::Diagnostics;

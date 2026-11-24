@@ -49,6 +49,7 @@ Exposures::exposure_completed_errors Exposures::test_exposure_procedure(bool dem
         setExposedData(1, (unsigned char)0, filter, focus);
     }
     else {
+        /*
         // Demo pulse implementation
         exposure_pulse^ epulse = Exposures::getExposurePulse(0);
        // float mA = getSelectedAnodeCurrent();
@@ -56,7 +57,8 @@ Exposures::exposure_completed_errors Exposures::test_exposure_procedure(bool dem
         // Activate the Buzzer in manual mode
         PCB301::setBuzzerManualMode(true);
 
-        float result_mas = demo2DPulse(Exposures::getExposurePulse(0)->mAs, mA);
+        
+         float result_mas = demo2DPulse(Exposures::getExposurePulse(0)->mAs, mA);
         if (result_mas <= 0) {
             result_mas = -1 * result_mas;
             error = exposure_completed_errors::XRAY_BUTTON_RELEASE;
@@ -68,6 +70,7 @@ Exposures::exposure_completed_errors Exposures::test_exposure_procedure(bool dem
 
         setExposedPulse(0, gcnew exposure_pulse(epulse->getKv(), result_mas, epulse->getFilter(), mA, (result_mas * 1000) / mA, 1, 1));
         PCB301::setBuzzerManualMode(false);
+        */
     }
     
     return error;

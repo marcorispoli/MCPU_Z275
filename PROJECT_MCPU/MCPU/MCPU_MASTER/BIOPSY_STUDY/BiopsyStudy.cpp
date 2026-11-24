@@ -7,8 +7,6 @@
 #include "IconWindow.h"
 #include "VerticalMotor.h"
 #include "ArmMotor.h"
-#include "BodyMotor.h"
-#include "SlideMotor.h"
 #include "TiltMotor.h"
 #include "ExposureModule.h"
 #include "../DEVICES/PCB325.h"
@@ -171,12 +169,6 @@ void BiopsyStudy::formInitialization(void) {
 	confirmationButton->BackgroundImage = CONFIRMATION_BUTTON_IMG;
 	confirmationButton->Hide();
 	
-	// Confirmation Panel Setup ____________________________________________________________
-	System::String^ confInfoTitle = "[" + Notify::TranslateNumber(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION) + "] " + Notify::TranslateTitle(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION);
-	System::String^ confInfoContent = Notify::TranslateContent(Notify::messages::INFO_SLIDE_ACTIVATION_CONFIRMATION);
-	pShiftConf = gcnew ConfirmationWindow(this, ConfirmationWindow::InfoType::INF_WIN, confInfoTitle, confInfoContent);
-	((ConfirmationWindow^)pShiftConf)->button_canc_event += gcnew ConfirmationWindow::delegate_button_callback(this, &BiopsyStudy::onShiftConfirmCanc);
-	((ConfirmationWindow^)pShiftConf)->button_ok_event += gcnew ConfirmationWindow::delegate_button_callback(this, &BiopsyStudy::onShiftConfirmOk);
 	
 
 	//________________________________________________________________________________________
@@ -209,9 +201,6 @@ void BiopsyStudy::formInitialization(void) {
 
 	// Motors Panel
 	armPosition->BackgroundImage = MOTORS_PANEL_IMAGE;
-
-	// Slide status	
-	slideButton->BackgroundImage = SLIDE_90_IMAGE;
 
 	// Pointer Panel
 	pointerPosition->BackgroundImage = COORDINATES_IMAGE;
@@ -304,8 +293,6 @@ void BiopsyStudy::initOperatingStatus(void) {
 	// initialize the evaluation function
 	evaluateCompressorStatus(true);
 
-	// init of the slide status view
-	evaluateSlideStatus(true);
 
 	// The Biopsy device is set in Command mode and the keyboard is set in normal mode
 	PCB325::setBiopsyCommandMode();
@@ -621,23 +608,6 @@ void BiopsyStudy::evaluateDoorStatus(void) {
 	
 }
 
-void BiopsyStudy::evaluateSlideStatus(bool init) {
-	static int stat = 255;
-	if (init) stat = 255;
-
-	int cur_stat;
-	if (SlideMotor::device->getCurrentPosition() < 500) cur_stat = 0;
-	else cur_stat = 1;
-	
-	if (stat != cur_stat) {
-		stat = cur_stat;
-
-		if(stat == 0)  slideButton->BackgroundImage = SLIDE_90_IMAGE;
-		else slideButton->BackgroundImage = SLIDE_0_IMAGE;
-	}
-
-	
-}
 
 
 void BiopsyStudy::evaluateAwsComponentEvent(void) {
@@ -783,7 +753,6 @@ void BiopsyStudy::operatingStatusManagement(void) {
 	evaluateCompressorStatus(false);	
 	evaluateCollimatorStatus();	
 	evaluateDoorStatus();
-	evaluateSlideStatus(false);	
 	evaluateDigitDisplays();
 	
 	evaluateAwsComponentEvent();
@@ -835,35 +804,10 @@ void BiopsyStudy::errorButton_Click(System::Object^ sender, System::EventArgs^ e
 	if(Notify::isError() || Notify::isWarning())	Notify::open_error(this);
 }
 
-
-void BiopsyStudy::ShiftSelection_Click(System::Object^ sender, System::EventArgs^ e) {
-	
-	// If a motorization is activated returns 
-	if (Gantry::isMotorsActive()) return;
-
-	((ConfirmationWindow^)pShiftConf)->setContentBackground(slideButton->BackgroundImage);
-	((ConfirmationWindow^)pShiftConf)->open();
-}
-
-
-
 void BiopsyStudy::lampButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	PCB303::setCollimationLight(true);
 	
 }
-
-
-
-void BiopsyStudy::onShiftConfirmOk(void) {
-
-	if (SlideMotor::device->getCurrentPosition() < 500) SlideMotor::isoAutoPosition(9000);
-	else SlideMotor::isoAutoPosition(0);
-	
-}
-void BiopsyStudy::onShiftConfirmCanc(void) {
-	
-}
-
 
 
 void BiopsyStudy::evaluateDigitDisplays(void) {
@@ -901,28 +845,6 @@ void BiopsyStudy::evaluateDigitDisplays(void) {
 		return;
 	}
 
-	if (BodyMotor::device->isRunning()) {
-		blink = false;
-		intensity = 0xf;
-
-		// Degrees
-		digits = 0;
-		dspval = (BodyMotor::device->getCurrentPosition() / 10);
-		PCB304::setDisplay(dspval, digits, blink, intensity,false,false,false);
-		return;
-	}
-
-	if (SlideMotor::device->isRunning()) {
-		blink = false;
-		intensity = 0xf;
-
-		// Degrees
-		digits = 0;
-		dspval = (SlideMotor::device->getCurrentPosition() / 100);
-		PCB304::setDisplay(dspval, digits, blink, intensity,false,false,false);
-		return;
-	}
-
 	PCB304::setDisplay(false);
 }
 
@@ -930,8 +852,6 @@ void BiopsyStudy::evaluatePopupPanels(void) {
 #define TMO 20
 	static bool compression = false;
 	static bool arm = false;
-	static bool body = false;
-	static bool slide = false;
 	static bool vertical = false;
 	static bool tilt = false;
 	static int  timer = 0;
@@ -941,8 +861,6 @@ void BiopsyStudy::evaluatePopupPanels(void) {
 		if(Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->close();
 		compression = false;
 		arm = false;
-		body = false;
-		slide = false;
 		vertical = false;
 		tilt = false;
 		timer = 0;
@@ -991,9 +909,7 @@ void BiopsyStudy::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = true;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(COMPRESSING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_COMPRESSION_ACTIVATED), "(N)");
 			else Gantry::getValuePopupWindow()->open(this, COMPRESSING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_COMPRESSION_ACTIVATED), "(N)");
@@ -1013,9 +929,7 @@ void BiopsyStudy::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = false;
 			arm = true;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(ARM_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_ARM_ACTIVATED), "(°)");
 			else Gantry::getValuePopupWindow()->open(this, ARM_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_ARM_ACTIVATED), "(°)");
@@ -1034,41 +948,14 @@ void BiopsyStudy::evaluatePopupPanels(void) {
 	}
 
 	
-	if (!body) {
-		// Compressor Window Initialization
-		if (BodyMotor::device->isRunning()) {
-			timer = TMO;
-			compression = false;
-			arm = false;
-			body = true;
-			vertical = false;
-			slide = false;
-			tilt = false;
-			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(BODY_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_BODY_ACTIVATED), "(°)");
-			else Gantry::getValuePopupWindow()->open(this, BODY_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_BODY_ACTIVATED), "(°)");
-
-			// Set the value to the current compression
-			float position = (float)BodyMotor::device->getCurrentPosition() / 10;
-			Gantry::getValuePopupWindow()->content(position.ToString());
-			return;
-		}
-	}
-	else {
-		// Set the value to the current compression
-		float position = (float)BodyMotor::device->getCurrentPosition() / 10;
-		Gantry::getValuePopupWindow()->content(position.ToString());
-		if (BodyMotor::device->isRunning()) timer = TMO;
-	}
-
+	
 	if (!vertical) {
 		// Compressor Window Initialization
 		if (VerticalMotor::device->isRunning()) {
 			timer = TMO;
 			compression = false;
 			arm = false;
-			body = false;
 			vertical = true;
-			slide = false;
 			tilt = false;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(VERTICAL_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_VERTICAL_ACTIVATED), "(mm)");
 			else Gantry::getValuePopupWindow()->open(this, VERTICAL_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_VERTICAL_ACTIVATED), "(mm)");
@@ -1087,31 +974,6 @@ void BiopsyStudy::evaluatePopupPanels(void) {
 	}
 	
 	
-	if (!slide) {
-		// Compressor Window Initialization
-		if (SlideMotor::device->isRunning()) {
-			timer = TMO;
-			compression = false;
-			arm = false;
-			body = false;
-			vertical = false;
-			slide = true;
-			tilt = false;
-			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(SLIDE_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_SLIDE_ACTIVATED), "(°)");
-			else Gantry::getValuePopupWindow()->open(this, SLIDE_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_SLIDE_ACTIVATED), "(°)");
-
-			// Set the value to the current compression
-			int position = (int)SlideMotor::device->getCurrentPosition() / 100;
-			Gantry::getValuePopupWindow()->content(position.ToString());
-			return;
-		}
-	}
-	else {
-		// Set the value to the current compression
-		int position = (int)SlideMotor::device->getCurrentPosition() / 100;
-		Gantry::getValuePopupWindow()->content(position.ToString());
-		if (SlideMotor::device->isRunning()) timer = TMO;
-	}
 	
 	if (!tilt) {
 		// Compressor Window Initialization
@@ -1119,9 +981,7 @@ void BiopsyStudy::evaluatePopupPanels(void) {
 			timer = TMO;
 			compression = false;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = true;
 			if (Gantry::getValuePopupWindow()->open_status) Gantry::getValuePopupWindow()->retitle(TILT_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_TILT_ACTIVATED), "(.01°)");
 			else Gantry::getValuePopupWindow()->open(this, TILT_EXECUTING_ICON, Notify::TranslateLabel(Notify::messages::LABEL_TILT_ACTIVATED), "(°)");
@@ -1146,9 +1006,7 @@ void BiopsyStudy::evaluatePopupPanels(void) {
 		if (!timer) {
 			compression = false;
 			arm = false;
-			body = false;
 			vertical = false;
-			slide = false;
 			tilt = false;
 			Gantry::getValuePopupWindow()->close();			
 		}

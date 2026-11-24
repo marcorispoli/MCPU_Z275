@@ -35,12 +35,9 @@ public:
 private: System::Windows::Forms::Panel^ aecButton;
 private: System::Windows::Forms::Label^ labelAec;
 public:
-	Object^ pShiftConf;
 	void suspend(void);
 	void resume(void);
 	
-	void onShiftConfirmOk(void);
-	void onShiftConfirmCanc(void);
 
 	void initOperatingStatus(void);
 	void operatingStatusManagement(void);
@@ -48,9 +45,7 @@ public:
 	void evaluateReadyWarnings(bool reset);
 	void evaluateCompressorStatus(bool init);
 	void evaluateCollimatorStatus(void);
-	void evaluateSlideStatus(bool init);
 	void evaluatePopupPanels(void);
-	void evaluateGridStatus(void);
 	void evaluateAwsComponentEvent(void);
 	
 
@@ -353,7 +348,6 @@ private:
 		this->slideButton->Name = L"slideButton";
 		this->slideButton->Size = System::Drawing::Size(135, 135);
 		this->slideButton->TabIndex = 0;
-		this->slideButton->Click += gcnew System::EventHandler(this, &TestStudy::ShiftSelection_Click);
 		// 
 		// collimationStatus
 		// 
@@ -432,7 +426,6 @@ private:
 	
 	private: System::Void aecButton_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void errorButton_Click(System::Object^ sender, System::EventArgs^ e);	
-	private: System::Void ShiftSelection_Click(System::Object^ sender, System::EventArgs^ e);
 
 };
 

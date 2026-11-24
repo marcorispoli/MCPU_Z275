@@ -340,7 +340,6 @@
 	The Application implements a special global activation command that acts as a daisy chain activation
 	that involves in a predefined sequence the following motors:
 	+ Tilt Motor;
-	+ Slide Motor;
 	+ Arm Motor;
 
 	+ The sequence starts with the Tilt motor activated to the 0°;

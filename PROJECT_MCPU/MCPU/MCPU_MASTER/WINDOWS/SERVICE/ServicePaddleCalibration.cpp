@@ -194,21 +194,6 @@ void ServicePaddleCalibrationTool::cancButton_Click(System::Object^ sender, Syst
 	
 }
 
-System::Void ServicePaddleCalibrationTool::zeroSettingBody_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (current_zero_command != zero_commands::NO_COMMAND) return;	
-	
-	
-	
-
-	executeIcon->BackgroundImage = BODY_ICON_IMAGE;
-	Gantry::setManualRotationMode(Gantry::manual_rotation_options::GANTRY_BODY_MANUAL_ROTATION);
-		
-
-	
-	current_panel = zero_panels::ZERO_BODY_PANEL;
-	serviceTimer->Start();
-}
-
 
 System::Void ServicePaddleCalibrationTool::zeroSettingTilt_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (current_zero_command != zero_commands::NO_COMMAND) return;

@@ -21,7 +21,6 @@
 /// + Arm Motor Parameters: the parameters controlling the C-ARM motor activation;
 /// + Vertical Motor Parameters: the parameters controlling the Vertical motor activation;
 /// + Tilt Motor Parameters: the parameters controlling the Tilt motor activation;
-/// + Slide Motor Parameters: the parameters controlling the Slide motor activation;
 /// 
 /// 
 

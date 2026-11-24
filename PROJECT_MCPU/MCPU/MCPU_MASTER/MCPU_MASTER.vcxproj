@@ -155,7 +155,6 @@
     <ClInclude Include="DEVICES\PCB325.h" />
     <ClInclude Include="DEVICES\PCB326.h" />
     <ClInclude Include="DEVICES\PCB334.h" />
-    <ClInclude Include="DEVICES\PCB335.h" />
     <ClInclude Include="DEVICES\PCB336.h" />
     <ClInclude Include="EXPOSURES\ExposureModule.h" />
     <ClInclude Include="MESSAGES\Log.h" />
@@ -245,7 +244,6 @@
     <ClCompile Include="DEVICES\PCB325.cpp" />
     <ClCompile Include="DEVICES\PCB326.cpp" />
     <ClCompile Include="DEVICES\PCB334.cpp" />
-    <ClCompile Include="DEVICES\PCB335.cpp" />
     <ClCompile Include="DEVICES\PCB336.cpp" />
     <ClCompile Include="EXPOSURES\Exposure2DModule.cpp" />
     <ClCompile Include="EXPOSURES\Exposure3DCalibModule.cpp" />
@@ -323,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="WINDOWS\ErrorForm.resx">
       <DependentUpon>WINDOWS\ErrorForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WINDOWS\GUIStartupOperatingForm.resx">
+      <DependentUpon>WINDOWS\GUIStartupOperatingForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WINDOWS\IdleForm.resx" />
     <EmbeddedResource Include="WINDOWS\infoPopup.resx">

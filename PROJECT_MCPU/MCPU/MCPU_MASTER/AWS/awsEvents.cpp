@@ -8,7 +8,6 @@
 #include "PCB304.h"
 #include "PCB326.h"
 #include "ExposureModule.h"
-#include "Generator.h"
 #include "mutex"
 
 /// \addtogroup AWSProtocolDescription
@@ -19,6 +18,7 @@
 ///
 
 using namespace System::Diagnostics;
+using namespace System;
 
 static std::mutex event_mutex;
 

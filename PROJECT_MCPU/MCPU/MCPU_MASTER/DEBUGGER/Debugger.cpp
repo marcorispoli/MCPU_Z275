@@ -8,8 +8,6 @@
 #include "TiltMotor.h"
 #include "ArmMotor.h"
 #include "VerticalMotor.h"
-#include "BodyMotor.h"
-#include "SlideMotor.h"
 #include "ExposureModule.h"
 
 
@@ -150,7 +148,6 @@ void DebuggerCLI::rxHandler(void){
 	case menu_index::ROOT: handleRootCommands(sFrame); send(System::Text::Encoding::Unicode->GetBytes("root:")); break;
 	case menu_index::POTTER: handlePotterCommands(sFrame); send(System::Text::Encoding::Unicode->GetBytes("potter:")); break;
 	case menu_index::COM: handleComCommands(sFrame); send(System::Text::Encoding::Unicode->GetBytes("communication:")); break;
-	case menu_index::GENERATOR: handleGeneratorCommands(sFrame); send(System::Text::Encoding::Unicode->GetBytes("generator:")); break;
 	case menu_index::COMPRESSOR: handleCompressorCommands(sFrame); send(System::Text::Encoding::Unicode->GetBytes("compressor:")); break;
 	case menu_index::COLLIMATOR: handleCollimatorCommands(sFrame); send(System::Text::Encoding::Unicode->GetBytes("collimator:")); break;
 	case menu_index::EXPOSURES: handleExposureCommands(sFrame); send(System::Text::Encoding::Unicode->GetBytes("exposures:")); break;
@@ -475,31 +472,13 @@ void DebuggerCLI::handleComCommands(System::String^ cmd) {
 		if (!TiltMotor::device->isSimulatorMode()) result_string += "TiltMotor: " + TiltMotor::device->getCanCommunicationMonitorString() + "\n\r";
 		if (!ArmMotor::device->isSimulatorMode()) result_string += "ArmMotor: " + ArmMotor::device->getCanCommunicationMonitorString() + "\n\r";
 		if (!VerticalMotor::device->isSimulatorMode()) result_string += "VerticalMotor: " + VerticalMotor::device->getCanCommunicationMonitorString() + "\n\r";
-		if (!BodyMotor::device->isSimulatorMode()) result_string += "BodyMotor: " + BodyMotor::device->getCanCommunicationMonitorString() + "\n\r";
-		if (!SlideMotor::device->isSimulatorMode()) result_string += "SlideMotor: " + SlideMotor::device->getCanCommunicationMonitorString() + "\n\r";
+		
 		send(System::Text::Encoding::Unicode->GetBytes(result_string));
 		return;
 	}
 }
 
-void DebuggerCLI::handleGeneratorCommands(System::String^ cmd) {
-	
-	if (cmd->Contains("ANODE_TABLE")) {
-		send(System::Text::Encoding::Unicode->GetBytes("Generator Anodic Table Generation .. "));
-		Exposures::pExposure->generateAnodicCurrentTable(true);
-		Exposures::pExposure->generateAnodicCurrentTable(false);
-		send(System::Text::Encoding::Unicode->GetBytes(" -> Completed!"));
-		return;
-	}
 
-	// Shows the list of available commands if no valid command is detedcted
-	System::String^ lista;
-	lista = " -> ANODE_TABLE - generates the Tube load curve\n\r";
-	lista += "\n\r";
-
-	send(System::Text::Encoding::Unicode->GetBytes(lista));
-	
-}
 void DebuggerCLI::handleCompressorCommands(System::String^ cmd) {
 	System::String^ result_string = "";
 

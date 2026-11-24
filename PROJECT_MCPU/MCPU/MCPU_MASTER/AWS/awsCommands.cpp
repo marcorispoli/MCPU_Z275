@@ -4,8 +4,6 @@
 #include "ArmMotor.h"
 #include "VerticalMotor.h"
 #include "TiltMotor.h"
-#include "BodyMotor.h"
-#include "SlideMotor.h"
 #include "PCB301.h"
 #include "PCB302.h"
 #include "PCB303.h"
@@ -13,7 +11,6 @@
 #include "PCB325.h"
 #include "PCB326.h"
 #include "ExposureModule.h"
-#include "Generator.h"
 #include "Notify.h"
 #include "Log.h"
 #include "BiopsyStudy.h"
@@ -21,7 +18,7 @@
 
 
 using namespace System::Diagnostics;
-
+using namespace System;
 
 /// \addtogroup AWSProtocolDescription
 ///  
@@ -1648,14 +1645,6 @@ void   awsProtocol::EXEC_TestCommand(void) {
         int dec = System::Convert::ToInt16(pDecodedFrame->parameters[4]);
         TiltMotor::activateTomoScan(pos, speed, acc, dec);
     }
-    else if (pDecodedFrame->parameters[0] == "SLIDE") {
-        LogClass::logInFile("TEST ON SLIDE MOTOR");
-        int pos = System::Convert::ToInt16(pDecodedFrame->parameters[1]);
-        int speed = System::Convert::ToInt16(pDecodedFrame->parameters[2]);
-        int acc = System::Convert::ToInt16(pDecodedFrame->parameters[3]);
-        int dec = System::Convert::ToInt16(pDecodedFrame->parameters[4]);
-        SlideMotor::device->activateAutomaticPositioning(0, pos, speed, acc, dec, true);
-    }
     else if (pDecodedFrame->parameters[0] == "ARM") {
         LogClass::logInFile("TEST ON ARM MOTOR");
         int pos = System::Convert::ToInt16(pDecodedFrame->parameters[1]);
@@ -1663,14 +1652,6 @@ void   awsProtocol::EXEC_TestCommand(void) {
         int acc = System::Convert::ToInt16(pDecodedFrame->parameters[3]);
         int dec = System::Convert::ToInt16(pDecodedFrame->parameters[4]);
         ArmMotor::device->activateAutomaticPositioning(0, pos, speed, acc, dec, true);
-    }
-    else if (pDecodedFrame->parameters[0] == "BODY") {
-        LogClass::logInFile("TEST ON BODY MOTOR");
-        int pos = System::Convert::ToInt16(pDecodedFrame->parameters[1]);
-        int speed = System::Convert::ToInt16(pDecodedFrame->parameters[2]);
-        int acc = System::Convert::ToInt16(pDecodedFrame->parameters[3]);
-        int dec = System::Convert::ToInt16(pDecodedFrame->parameters[4]);
-        BodyMotor::device->activateAutomaticPositioning(0, pos, speed, acc, dec, true);
     }
     else if (pDecodedFrame->parameters[0] == "VERTICAL") {
         LogClass::logInFile("TEST ON VERTICAL MOTOR");

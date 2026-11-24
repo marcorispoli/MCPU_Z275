@@ -38,9 +38,6 @@
 		+ pointing management;
 		+ external keybord management;
 
-	+ Slide Arm management:
-		+ Slide activation to 0°;
-		+ Slide activation to 90°;
 
 	+ 2D Control image visualization;
 
@@ -139,28 +136,7 @@
 	\image html ./BiopsyStudy/motors.png
 
 	
-	## Slide motor
-
-	The module provides a dedicated graphical button in the GUI 
-	to allow the operatore to start an automatic Slide activation in two possible 
-	target angles:
-	+ 0° (standard position);
-	+ 90° (usually needed with the table).
-
-	\note The Isocentric correction feature is disabled (no Vertical correction will be executed);
-
-	The table below describes the button activations:
-
-	|Icon|Description|
-	|:--:|:--:|
-	|\image html ./BiopsyStudy/slide_to_0.png|The current Slide angle is 90°. Pressing this button the Slide motor will move to 0°|
-	|\image html ./BiopsyStudy/slide_to_90.png|The current Slide angle is 0°. Pressing this button the Slide motor will move to 90°|
 	
-	Current angle visualization:
-	+ During the Slide rotation, a Dialog on the displays will show the actual Slide angle.
-	The panel will disappear in few seconds after the activation termination;
-	+ During the Slide rotation, the potter's display will show the actual Slide angle;
-
 	## Vertical Motor
 
 	In the Biopsy Study the following rules apply to the Vertical motor activation:
@@ -453,7 +429,6 @@ public:
 	bool open_status;
 	
 	Object^ pXray;		
-	Object^ pShiftConf;
 
 private: System::Windows::Forms::Panel^ pointerPosition;
 private: System::Windows::Forms::Label^ XLabel;
@@ -488,8 +463,6 @@ public:
 	void suspend(void);
 	void resume(void);	
 	
-	void onShiftConfirmOk(void);
-	void onShiftConfirmCanc(void);
 
 	void initOperatingStatus(void);
 	void operatingStatusManagement(void);
@@ -502,7 +475,6 @@ public:
 
 	void evaluateDoorStatus(void);
 	void evaluateCollimatorStatus(void);
-	void evaluateSlideStatus(bool init);
 	void evaluatePopupPanels(void);
 	void evaluateDigitDisplays(void);
 	
@@ -1000,7 +972,6 @@ private:
 		this->slideButton->Name = L"slideButton";
 		this->slideButton->Size = System::Drawing::Size(135, 135);
 		this->slideButton->TabIndex = 0;
-		this->slideButton->Click += gcnew System::EventHandler(this, &BiopsyStudy::ShiftSelection_Click);
 		// 
 		// lampButton
 		// 
@@ -1049,10 +1020,6 @@ private:
 	private: System::Void lampButton_Click(System::Object^ sender, System::EventArgs^ e);
 	
 	private: System::Void errorButton_Click(System::Object^ sender, System::EventArgs^ e);
-	
-	private: System::Void ShiftSelection_Click(System::Object^ sender, System::EventArgs^ e);
-
-
 
 	private: System::Void confirmationButton_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		confirmation_button_status = true;

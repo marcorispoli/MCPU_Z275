@@ -49,7 +49,6 @@ private:
 
 	void handleRootCommands(System::String^ cmd); 
 	void handlePotterCommands(System::String^ cmd);
-	void handleGeneratorCommands(System::String^ cmd);
 	void handleCompressorCommands(System::String^ cmd);
 	void handleCollimatorCommands(System::String^ cmd);
 	void handleExposureCommands(System::String^ cmd);

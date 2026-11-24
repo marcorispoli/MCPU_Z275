@@ -104,7 +104,6 @@ public:
     literal int     SYM_MODE_PCB325 = 11;
     literal int     SYM_MODE_PCB326 = 12;
     literal int     SYM_MODE_PCB334 = 13;
-    literal int     SYM_MODE_PCB335 = 14;
     literal int     SYM_MODE_PCB336 = 15;
 
     literal System::String^ PARAM_SYM_MODE_IP_DEFAULT = "127.0.0.1";
@@ -121,7 +120,6 @@ public:
     literal System::String^ PARAM_SYM_MODE_PCB325_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB326_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB334_DEFAULT = "0";
-    literal System::String^ PARAM_SYM_MODE_PCB335_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB336_DEFAULT = "0";
 
 
@@ -281,7 +279,6 @@ public:
             PARAM_SYM_MODE_PCB325_DEFAULT,
             PARAM_SYM_MODE_PCB326_DEFAULT,
             PARAM_SYM_MODE_PCB334_DEFAULT,
-            PARAM_SYM_MODE_PCB335_DEFAULT,
             PARAM_SYM_MODE_PCB336_DEFAULT
             }),
 

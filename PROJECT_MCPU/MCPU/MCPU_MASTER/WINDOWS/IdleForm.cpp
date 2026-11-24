@@ -13,7 +13,6 @@
 #include "PCB325.h"
 #include "PCB326.h"
 #include "PCB334.h"
-#include "PCB335.h"
 #include "PCB336.h"
 #include "VerticalMotor.h"
 #include "ArmMotor.h"
@@ -266,13 +265,16 @@ void IdleForm::initIdleStatus(void) {
 		this->xrayMode->Show();
 	}
 	else {
+		this->xrayMode->BackgroundImage = XRAY_MODE;
+		this->xrayMode->Show();
+		/*
 		if (PCB335::device->isSimulatorMode()) {
 			this->xrayMode->Hide();
 		}
 		else {
 			this->xrayMode->BackgroundImage = XRAY_MODE;
 			this->xrayMode->Show();
-		}
+		}*/
 
 	}
 	
@@ -587,12 +589,13 @@ void IdleForm::idleStatusManagement(void) {
 	}
 
 	/// The current exposure mode icon is updated
+	/*
 	if (!PCB335::device->isSimulatorMode()) {		
 		if (xray_mode_status != 1) {
 			this->xrayMode->BackgroundImage = XRAY_MODE;
 			xray_mode_status = 1;
 		}		
-	}
+	}*/
 
 	/// The popup event dialog activation is evaluated.
 	evaluatePopupPanels();

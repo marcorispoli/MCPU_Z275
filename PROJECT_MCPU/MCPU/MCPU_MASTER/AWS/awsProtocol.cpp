@@ -18,6 +18,7 @@
 
 
 using namespace System::Diagnostics;
+using namespace System;
 
 awsProtocol::awsProtocol(void) {
     System::String^ ip = SystemConfig::Configuration->getParam(SystemConfig::PARAM_AWS_CONNECTIONS)[SystemConfig::PARAM_AWS_CONNECTIONS_IP];

@@ -90,8 +90,6 @@ public: void rotationTool_select_item(System::Windows::Forms::PictureBox^ item);
 public: void rotationTooCreateInfoPanel(unsigned char reason);
 public: void rotationToolSelectionArmOkCallback(void);
 public: void rotationToolSelectionTiltOkCallback(void);
-public: void rotationToolSelectionBodyOkCallback(void);
-public: void rotationToolSelectionSlideOkCallback(void);
 public: void rotationToolSelectionCancCallback(void);
 
 
@@ -402,7 +400,6 @@ private:
 		this->rotationToolSlideButton->Size = System::Drawing::Size(160, 160);
 		this->rotationToolSlideButton->TabIndex = 27;
 		this->rotationToolSlideButton->TabStop = false;
-		this->rotationToolSlideButton->Click += gcnew System::EventHandler(this, &ServiceRotationTool::rotationTool_slide_Click);
 		// 
 		// rotationToolBodyButton
 		// 
@@ -489,7 +486,6 @@ private:
 	private: System::Void rotationTool_body_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void rotationTool_tilt_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void rotationTool_arm_Click(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void rotationTool_slide_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void rotationTool_manual_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void rotationTool_selection_angle_1_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void rotationTool_selection_angle_2_Click(System::Object^ sender, System::EventArgs^ e);

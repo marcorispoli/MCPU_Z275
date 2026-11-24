@@ -1,7 +1,4 @@
-#include "R2CP_Eth.h"
-#include "CaDataDicGen.h"
 #include "ConfigurationFiles.h"
-#include "Generator.h"
 #include "gantry_global_status.h"
 #include "ExposureModule.h"
 #include "Notify.h"
@@ -22,7 +19,7 @@ bool Exposures::startExposure(void) {
     if (!getExposurePulse(0)->validated) return false;
 
     // Test if the Generator is Ready to start a new exposure
-    if (!isReadyForExposure()) return false; 
+    //if (!isReadyForExposure()) return false; 
     
     // Test if a pending exposure is requested
     if (xray_processing) return false; 
@@ -74,9 +71,7 @@ void Exposures::exposureManagementLoop(bool demo) {
 
     exposure_completed_errors exposure_err_code;
 
-    // Resets of the Internal Generator Module exposed pulses for all data-banks    
-    if(!demo) R2CP::CaDataDicGen::GetInstance()->resetExecutedPulse();
-
+    
     // Reset of the Application Exposure Pulses
     setExposedPulse(0, gcnew exposure_pulse());
     setExposedPulse(1, gcnew exposure_pulse());
@@ -199,17 +194,7 @@ void Exposures::exposureManagementLoop(bool demo) {
     /// <param name="ft">Filter used in the exposure</param>
     /// <param name="fc">This is the focus used in the exposure</param>
 void Exposures::setExposedData(unsigned char databank_index, unsigned char pulse_seq, PCB303::filter_index ft, unsigned char fc) {
-    if (R2CP::CaDataDicGen::GetInstance()->executed_pulses[databank_index].samples) {
-        setExposedPulse(pulse_seq, gcnew Exposures::exposure_pulse(
-            R2CP::CaDataDicGen::GetInstance()->executed_pulses[databank_index].kV,
-            R2CP::CaDataDicGen::GetInstance()->executed_pulses[databank_index].mAs,
-            ft,
-            R2CP::CaDataDicGen::GetInstance()->executed_pulses[databank_index].mA,
-            R2CP::CaDataDicGen::GetInstance()->executed_pulses[databank_index].ms,
-            fc,
-            R2CP::CaDataDicGen::GetInstance()->executed_pulses[databank_index].samples
-        ));
-    }
+    
 }
 
 
