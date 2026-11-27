@@ -134,7 +134,7 @@ unsigned short VerticalMotor::initializeSpecificObjectDictionaryCallback(void) {
 /// - Initializes the encoder initial position from the configuration file;
 /// 
 /// <param name=""></param>
-VerticalMotor::VerticalMotor(void) :CANOPEN::CanOpenMotor((unsigned char)CANOPEN::MotorDeviceAddresses::VERTICAL_ID, L"MOTOR_VERTICAL", MotorConfig::PARAM_VERTICAL, Notify::messages::ERROR_VERTICAL_MOTOR_HOMING, MIN_POSITION, MAX_POSITION, ROT_PER_MM, 1, false)
+VerticalMotor::VerticalMotor(void) :CANOPEN::CanOpenMotor((unsigned char)CANOPEN::MotorDeviceAddresses::VERTICAL_ID, L"MOTOR_VERTICAL", MotorConfig::PARAM_VERTICAL, Notify::messages::ERROR_VERTICAL_MOTOR_HOMING, MIN_POSITION, MAX_POSITION, ROT_PER_MM, 1, true)
 {
     // Sets +/- 5mm as the acceptable target range
     setTargetRange(5, 5);    

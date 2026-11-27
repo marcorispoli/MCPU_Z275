@@ -69,8 +69,8 @@ private: System::Windows::Forms::PictureBox^ serviceCanc;
 private: System::Windows::Forms::Panel^ rotationToolPanel;
 private: System::Windows::Forms::PictureBox^ rotationToolArmButton;
 private: System::Windows::Forms::PictureBox^ rotationToolManualButton;
-private: System::Windows::Forms::PictureBox^ rotationToolSlideButton;
-private: System::Windows::Forms::PictureBox^ rotationToolBodyButton;
+
+
 private: System::Windows::Forms::PictureBox^ rotationToolTiltButton;
 private: System::Windows::Forms::Panel^ rotationToolView;
 private: System::Windows::Forms::PictureBox^ rotationToolSelectionIcon;
@@ -125,8 +125,6 @@ private:
 		this->rotationToolSelectAngle2 = (gcnew System::Windows::Forms::PictureBox());
 		this->rotationToolSelectAngle1 = (gcnew System::Windows::Forms::PictureBox());
 		this->rotationToolSelectionIcon = (gcnew System::Windows::Forms::PictureBox());
-		this->rotationToolSlideButton = (gcnew System::Windows::Forms::PictureBox());
-		this->rotationToolBodyButton = (gcnew System::Windows::Forms::PictureBox());
 		this->rotationToolTiltButton = (gcnew System::Windows::Forms::PictureBox());
 		this->rotationToolArmButton = (gcnew System::Windows::Forms::PictureBox());
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->serviceCanc))->BeginInit();
@@ -143,8 +141,6 @@ private:
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolSelectAngle2))->BeginInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolSelectAngle1))->BeginInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolSelectionIcon))->BeginInit();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolSlideButton))->BeginInit();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolBodyButton))->BeginInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolTiltButton))->BeginInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolArmButton))->BeginInit();
 		this->SuspendLayout();
@@ -216,8 +212,6 @@ private:
 		// rotationToolPanel
 		// 
 		this->rotationToolPanel->Controls->Add(this->rotationToolView);
-		this->rotationToolPanel->Controls->Add(this->rotationToolSlideButton);
-		this->rotationToolPanel->Controls->Add(this->rotationToolBodyButton);
 		this->rotationToolPanel->Controls->Add(this->rotationToolTiltButton);
 		this->rotationToolPanel->Controls->Add(this->rotationToolArmButton);
 		this->rotationToolPanel->Location = System::Drawing::Point(0, 50);
@@ -390,29 +384,6 @@ private:
 		this->rotationToolSelectionIcon->TabIndex = 29;
 		this->rotationToolSelectionIcon->TabStop = false;
 		// 
-		// rotationToolSlideButton
-		// 
-		this->rotationToolSlideButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)),
-			static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(0)));
-		this->rotationToolSlideButton->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-		this->rotationToolSlideButton->Location = System::Drawing::Point(325, 214);
-		this->rotationToolSlideButton->Name = L"rotationToolSlideButton";
-		this->rotationToolSlideButton->Size = System::Drawing::Size(160, 160);
-		this->rotationToolSlideButton->TabIndex = 27;
-		this->rotationToolSlideButton->TabStop = false;
-		// 
-		// rotationToolBodyButton
-		// 
-		this->rotationToolBodyButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)),
-			static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(0)));
-		this->rotationToolBodyButton->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-		this->rotationToolBodyButton->Location = System::Drawing::Point(103, 214);
-		this->rotationToolBodyButton->Name = L"rotationToolBodyButton";
-		this->rotationToolBodyButton->Size = System::Drawing::Size(160, 160);
-		this->rotationToolBodyButton->TabIndex = 26;
-		this->rotationToolBodyButton->TabStop = false;
-		this->rotationToolBodyButton->Click += gcnew System::EventHandler(this, &ServiceRotationTool::rotationTool_body_Click);
-		// 
 		// rotationToolTiltButton
 		// 
 		this->rotationToolTiltButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)),
@@ -466,8 +437,6 @@ private:
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolSelectAngle2))->EndInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolSelectAngle1))->EndInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolSelectionIcon))->EndInit();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolSlideButton))->EndInit();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolBodyButton))->EndInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolTiltButton))->EndInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->rotationToolArmButton))->EndInit();
 		this->ResumeLayout(false);
@@ -483,7 +452,6 @@ private:
 	private: System::Void cancButton_Click(System::Object^ sender, System::EventArgs^ e);
 
 	// Rotation Tool Button callbacks
-	private: System::Void rotationTool_body_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void rotationTool_tilt_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void rotationTool_arm_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void rotationTool_manual_Click(System::Object^ sender, System::EventArgs^ e);

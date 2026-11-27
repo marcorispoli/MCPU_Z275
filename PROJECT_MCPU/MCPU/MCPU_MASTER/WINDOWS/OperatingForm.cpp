@@ -37,8 +37,6 @@
 #define AEC_IMAGE Image::FromFile(Gantry::applicationResourcePath + "OperatingForm\\aecSelection.PNG")
 
 
-#define SLIDE_0_IMAGE Image::FromFile(Gantry::applicationResourcePath + "OperatingForm\\Slide0.PNG")
-#define SLIDE_10_IMAGE Image::FromFile(Gantry::applicationResourcePath + "OperatingForm\\Slide10.PNG")
 
 #define INFO_BUTTON_ON Image::FromFile(Gantry::applicationResourcePath + "OperatingForm\\InfoIcon.PNG")
 #define WARNING_BUTTON_ON Image::FromFile(Gantry::applicationResourcePath + "OperatingForm\\WarningOn.PNG")
@@ -131,7 +129,6 @@ void OperatingForm::suspend(void) {
 	this->thicknessStatus->SuspendLayout();
 	this->paddleStatus->SuspendLayout();
 	this->tubeStatus->SuspendLayout();
-	this->slideButton->SuspendLayout();
 	this->collimationStatus->SuspendLayout();
 	this->SuspendLayout();
 }
@@ -145,7 +142,6 @@ void OperatingForm::resume(void) {
 	this->thicknessStatus->ResumeLayout(false);
 	this->paddleStatus->ResumeLayout(false);
 	this->tubeStatus->ResumeLayout(false);
-	this->slideButton->ResumeLayout(false);
 	this->collimationStatus->ResumeLayout(false);
 	this->ResumeLayout(false);
 }
@@ -244,8 +240,7 @@ void OperatingForm::formInitialization(void) {
 	// Decompression status	
 	decompressionStatus->BackgroundImage = COMPRESSION_KEEP_IMAGE;
 
-	// Slide status	
-	slideButton->BackgroundImage = SLIDE_10_IMAGE;
+	
 
 	operatingTimer = gcnew System::Timers::Timer(100);
 	operatingTimer->Elapsed += gcnew System::Timers::ElapsedEventHandler(this, &OperatingForm::onOperatingTimeout);

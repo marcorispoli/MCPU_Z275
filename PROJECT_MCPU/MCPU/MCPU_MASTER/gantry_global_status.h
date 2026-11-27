@@ -109,8 +109,9 @@ public:
     static inline bool isPcb304Demo(void) { return pcb304_simulator; }
     static inline bool isPcb325Demo(void) { return pcb325_simulator; }
     static inline bool isPcb326Demo(void) { return pcb326_simulator; }
-    static inline bool isPcb334Demo(void) { return pcb326_simulator; }
-    static inline bool isPcb336Demo(void) { return pcb326_simulator; }
+    static inline bool isPcb334Demo(void) { return pcb334_simulator; }
+    static inline bool isPcb336Demo(void) { return pcb336_simulator; }
+    static inline bool isPcb349Demo(void) { return pcb349_simulator; }
 
     static inline bool isMotorTiltDemo(void) { return motor_tilt_simulator; }
     static inline bool isMotorArmDemo(void) { return motor_arm_simulator; }
@@ -136,6 +137,7 @@ private:
     static bool pcb326_simulator = false;
     static bool pcb334_simulator = false;
     static bool pcb336_simulator = false;
+    static bool pcb349_simulator = false;
     static bool motor_vertical_simulator = false;
     static bool motor_tilt_simulator = false;
     static bool motor_arm_simulator = false;

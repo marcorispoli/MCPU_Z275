@@ -84,11 +84,11 @@ public:
 	private: System::Windows::Forms::Label^ labelTime;
 	private: System::Windows::Forms::PictureBox^ serviceCanc;
 	private: System::Windows::Forms::Panel^ calibZerosettingPanel;
-		private: System::Windows::Forms::PictureBox^ zeroSettingSlide;
+
 		private: System::Windows::Forms::PictureBox^ zeroSettingTilt;
 		private: System::Windows::Forms::PictureBox^ zeroSettingArm;
 		private: System::Windows::Forms::PictureBox^ zeroSettingVertical;
-		private: System::Windows::Forms::PictureBox^ zeroSettingBody;
+
 
 		private: System::Windows::Forms::Panel^ executePanel;
 			private: System::Windows::Forms::Label^ positionLabel;
@@ -121,8 +121,11 @@ private:
 		this->labelTime = (gcnew System::Windows::Forms::Label());
 		this->calibZerosettingPanel = (gcnew System::Windows::Forms::Panel());
 		this->executePanel = (gcnew System::Windows::Forms::Panel());
+		this->label2 = (gcnew System::Windows::Forms::Label());
 		this->manButton = (gcnew System::Windows::Forms::Button());
 		this->positionLabel = (gcnew System::Windows::Forms::Label());
+		this->externalPosition = (gcnew System::Windows::Forms::Label());
+		this->sensorLabel = (gcnew System::Windows::Forms::Label());
 		this->targetLabel = (gcnew System::Windows::Forms::Label());
 		this->zeroSettingLog = (gcnew System::Windows::Forms::RichTextBox());
 		this->executeIcon = (gcnew System::Windows::Forms::PictureBox());
@@ -130,24 +133,17 @@ private:
 		this->sensorValue = (gcnew System::Windows::Forms::Label());
 		this->encoderPosition = (gcnew System::Windows::Forms::Label());
 		this->targetSelection = (gcnew System::Windows::Forms::Label());
-		this->zeroSettingSlide = (gcnew System::Windows::Forms::PictureBox());
 		this->zeroSettingTilt = (gcnew System::Windows::Forms::PictureBox());
 		this->zeroSettingArm = (gcnew System::Windows::Forms::PictureBox());
 		this->zeroSettingVertical = (gcnew System::Windows::Forms::PictureBox());
-		this->zeroSettingBody = (gcnew System::Windows::Forms::PictureBox());
 		this->serviceCanc = (gcnew System::Windows::Forms::PictureBox());
 		this->serviceMenuTitle = (gcnew System::Windows::Forms::Label());
-		this->externalPosition = (gcnew System::Windows::Forms::Label());
-		this->sensorLabel = (gcnew System::Windows::Forms::Label());
-		this->label2 = (gcnew System::Windows::Forms::Label());
 		this->calibZerosettingPanel->SuspendLayout();
 		this->executePanel->SuspendLayout();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->executeIcon))->BeginInit();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingSlide))->BeginInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingTilt))->BeginInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingArm))->BeginInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingVertical))->BeginInit();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingBody))->BeginInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->serviceCanc))->BeginInit();
 		this->SuspendLayout();
 		// 
@@ -193,11 +189,9 @@ private:
 		// calibZerosettingPanel
 		// 
 		this->calibZerosettingPanel->Controls->Add(this->executePanel);
-		this->calibZerosettingPanel->Controls->Add(this->zeroSettingSlide);
 		this->calibZerosettingPanel->Controls->Add(this->zeroSettingTilt);
 		this->calibZerosettingPanel->Controls->Add(this->zeroSettingArm);
 		this->calibZerosettingPanel->Controls->Add(this->zeroSettingVertical);
-		this->calibZerosettingPanel->Controls->Add(this->zeroSettingBody);
 		this->calibZerosettingPanel->Location = System::Drawing::Point(0, 50);
 		this->calibZerosettingPanel->Name = L"calibZerosettingPanel";
 		this->calibZerosettingPanel->Size = System::Drawing::Size(600, 880);
@@ -223,6 +217,19 @@ private:
 		this->executePanel->Name = L"executePanel";
 		this->executePanel->Size = System::Drawing::Size(531, 406);
 		this->executePanel->TabIndex = 25;
+		// 
+		// label2
+		// 
+		this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(156)), static_cast<System::Int32>(static_cast<System::Byte>(149)),
+			static_cast<System::Int32>(static_cast<System::Byte>(149)));
+		this->label2->Location = System::Drawing::Point(347, 17);
+		this->label2->Name = L"label2";
+		this->label2->Size = System::Drawing::Size(164, 21);
+		this->label2->TabIndex = 38;
+		this->label2->Text = L"Sensor Position";
+		this->label2->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 		// 
 		// manButton
 		// 
@@ -253,6 +260,33 @@ private:
 		this->positionLabel->TabIndex = 35;
 		this->positionLabel->Text = L"Encoder Position";
 		this->positionLabel->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+		// 
+		// externalPosition
+		// 
+		this->externalPosition->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(216)),
+			static_cast<System::Int32>(static_cast<System::Byte>(207)), static_cast<System::Int32>(static_cast<System::Byte>(208)));
+		this->externalPosition->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 36, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->externalPosition->ForeColor = System::Drawing::Color::Gray;
+		this->externalPosition->Location = System::Drawing::Point(351, 38);
+		this->externalPosition->Name = L"externalPosition";
+		this->externalPosition->Size = System::Drawing::Size(170, 55);
+		this->externalPosition->TabIndex = 37;
+		this->externalPosition->Text = L"1024";
+		this->externalPosition->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+		// 
+		// sensorLabel
+		// 
+		this->sensorLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->sensorLabel->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(156)), static_cast<System::Int32>(static_cast<System::Byte>(149)),
+			static_cast<System::Int32>(static_cast<System::Byte>(149)));
+		this->sensorLabel->Location = System::Drawing::Point(347, 102);
+		this->sensorLabel->Name = L"sensorLabel";
+		this->sensorLabel->Size = System::Drawing::Size(164, 21);
+		this->sensorLabel->TabIndex = 34;
+		this->sensorLabel->Text = L"Digital Input";
+		this->sensorLabel->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 		// 
 		// targetLabel
 		// 
@@ -354,17 +388,6 @@ private:
 		this->targetSelection->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 		this->targetSelection->Click += gcnew System::EventHandler(this, &ServiceZeroSettingTool::targetSelection_Click);
 		// 
-		// zeroSettingSlide
-		// 
-		this->zeroSettingSlide->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)),
-			static_cast<System::Int32>(static_cast<System::Byte>(128)), static_cast<System::Int32>(static_cast<System::Byte>(0)));
-		this->zeroSettingSlide->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-		this->zeroSettingSlide->Location = System::Drawing::Point(220, 236);
-		this->zeroSettingSlide->Name = L"zeroSettingSlide";
-		this->zeroSettingSlide->Size = System::Drawing::Size(165, 165);
-		this->zeroSettingSlide->TabIndex = 23;
-		this->zeroSettingSlide->TabStop = false;
-		// 
 		// zeroSettingTilt
 		// 
 		this->zeroSettingTilt->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(128)),
@@ -401,17 +424,6 @@ private:
 		this->zeroSettingVertical->TabStop = false;
 		this->zeroSettingVertical->Click += gcnew System::EventHandler(this, &ServiceZeroSettingTool::zeroSettingVertical_Click);
 		// 
-		// zeroSettingBody
-		// 
-		this->zeroSettingBody->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(128)),
-			static_cast<System::Int32>(static_cast<System::Byte>(0)));
-		this->zeroSettingBody->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-		this->zeroSettingBody->Location = System::Drawing::Point(30, 236);
-		this->zeroSettingBody->Name = L"zeroSettingBody";
-		this->zeroSettingBody->Size = System::Drawing::Size(165, 165);
-		this->zeroSettingBody->TabIndex = 19;
-		this->zeroSettingBody->TabStop = false;
-		// 
 		// serviceCanc
 		// 
 		this->serviceCanc->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(128)),
@@ -437,46 +449,6 @@ private:
 		this->serviceMenuTitle->Text = L"TITLE";
 		this->serviceMenuTitle->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 		// 
-		// externalPosition
-		// 
-		this->externalPosition->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(216)),
-			static_cast<System::Int32>(static_cast<System::Byte>(207)), static_cast<System::Int32>(static_cast<System::Byte>(208)));
-		this->externalPosition->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 36, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-			static_cast<System::Byte>(0)));
-		this->externalPosition->ForeColor = System::Drawing::Color::Gray;
-		this->externalPosition->Location = System::Drawing::Point(351, 38);
-		this->externalPosition->Name = L"externalPosition";
-		this->externalPosition->Size = System::Drawing::Size(170, 55);
-		this->externalPosition->TabIndex = 37;
-		this->externalPosition->Text = L"1024";
-		this->externalPosition->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-		// 
-		// sensorLabel
-		// 
-		this->sensorLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-			static_cast<System::Byte>(0)));
-		this->sensorLabel->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(156)), static_cast<System::Int32>(static_cast<System::Byte>(149)),
-			static_cast<System::Int32>(static_cast<System::Byte>(149)));
-		this->sensorLabel->Location = System::Drawing::Point(347, 102);
-		this->sensorLabel->Name = L"sensorLabel";
-		this->sensorLabel->Size = System::Drawing::Size(164, 21);
-		this->sensorLabel->TabIndex = 34;
-		this->sensorLabel->Text = L"Digital Input";
-		this->sensorLabel->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-		// 
-		// label2
-		// 
-		this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-			static_cast<System::Byte>(0)));
-		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(156)), static_cast<System::Int32>(static_cast<System::Byte>(149)),
-			static_cast<System::Int32>(static_cast<System::Byte>(149)));
-		this->label2->Location = System::Drawing::Point(347, 17);
-		this->label2->Name = L"label2";
-		this->label2->Size = System::Drawing::Size(164, 21);
-		this->label2->TabIndex = 38;
-		this->label2->Text = L"Sensor Position";
-		this->label2->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
-		// 
 		// ServiceZeroSettingTool
 		// 
 		this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(60)), static_cast<System::Int32>(static_cast<System::Byte>(60)),
@@ -496,11 +468,9 @@ private:
 		this->calibZerosettingPanel->ResumeLayout(false);
 		this->executePanel->ResumeLayout(false);
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->executeIcon))->EndInit();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingSlide))->EndInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingTilt))->EndInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingArm))->EndInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingVertical))->EndInit();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->zeroSettingBody))->EndInit();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->serviceCanc))->EndInit();
 		this->ResumeLayout(false);
 		this->PerformLayout();

@@ -75,21 +75,21 @@ public:
     /// |EthPort|16 Bit Integer|20000|Port Range|IP Port of the Simulator process|
     /// |AUTOSTART|bool|1|0:1|Automatic start the local simultor application|
     /// |SymCan|Byte|0|1/0|Can Module: 1= normal mode, 0 = simulated mode|
-    /// |SymGenerator|Byte|0|1/0|Generator Module: 1= normal mode, 0 = simulated mode|
     /// |SymTilt|Byte|0|1/0|Tilt Module: 1= normal mode, 0 = simulated mode|  
     /// |SymArm|Byte|0|1/0|Arm Module: 1= normal mode, 0 = simulated mode|  
-    /// |SymBody|Byte|0|1/0|Body Module: 1= normal mode, 0 = simulated mode|
     /// |SymVertical|Byte|0|1/0|Vertical Module: 1= normal mode, 0 = simulated mode| 
-    /// |SymSlide|Byte|0|1/0|Slide Module: 1= normal mode, 0 = simulated mode| 
     /// |SymPcb301|Byte|0|1/0|PCB301 Module: 1= normal mode, 0 = simulated mode| 
     /// |SymPcb302|Byte|0|1/0|PCB302 Module: 1= normal mode, 0 = simulated mode|
     /// |SymPcb303|Byte|0|1/0|PCB303 Module: 1= normal mode, 0 = simulated mode|
     /// |SymPcb304|Byte|0|1/0|PCB304 Module: 1= normal mode, 0 = simulated mode|
     /// |SymPcb325|Byte|0|1/0|PCB325 Module: 1= normal mode, 0 = simulated mode|
     /// |SymPcb326|Byte|0|1/0|PCB326 Module: 1= normal mode, 0 = simulated mode|
-    /// 
+    /// |SymPcb334|Byte|0|1/0|PCB334 Module: 1= normal mode, 0 = simulated mode|
+    /// |SymPcb336|Byte|0|1/0|PCB336 Module: 1= normal mode, 0 = simulated mode|
+    /// |SymPcb349|Byte|0|1/0|PCB349 Module: 1= normal mode, 0 = simulated mode|
+
     literal System::String^ PARAM_SYM_MODE = "SYM_MODE";
-    literal System::String^ PARAM_SYM_MODE_COMMENT = "SYM Mode Setting: [1=Run, 0=Sim]: ip, port, autostart, can-driver, tilt, Arm,Vertical, 301, 302, 303, 304, 325, 326, 334, 335, 336";
+    literal System::String^ PARAM_SYM_MODE_COMMENT = "SYM Mode Setting: [1=Run, 0=Sim]: ip, port, autostart, can-driver, tilt, Arm,Vertical, 301, 302, 303, 304, 325, 326, 334, 336, 349";
     literal int     SYM_MODE_IP = 0;
     literal int     SYM_MODE_PORT = 1;
     literal int     SYM_AUTOSTART = 2;
@@ -104,7 +104,8 @@ public:
     literal int     SYM_MODE_PCB325 = 11;
     literal int     SYM_MODE_PCB326 = 12;
     literal int     SYM_MODE_PCB334 = 13;
-    literal int     SYM_MODE_PCB336 = 15;
+    literal int     SYM_MODE_PCB336 = 14;
+    literal int     SYM_MODE_PCB349 = 15;
 
     literal System::String^ PARAM_SYM_MODE_IP_DEFAULT = "127.0.0.1";
     literal System::String^ PARAM_SYM_MODE_PORT_DEFAULT = "20000";
@@ -121,6 +122,7 @@ public:
     literal System::String^ PARAM_SYM_MODE_PCB326_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB334_DEFAULT = "0";
     literal System::String^ PARAM_SYM_MODE_PCB336_DEFAULT = "0";
+    literal System::String^ PARAM_SYM_MODE_PCB349_DEFAULT = "0";
 
 
 
@@ -173,10 +175,10 @@ public:
     literal int        PARAM_PACKAGE_FW304 = 4;
     literal int        PARAM_PACKAGE_FW325 = 5;
     literal int        PARAM_PACKAGE_FW326 = 6;
-    literal int        PARAM_PACKAGE_FW334 = 6;
-    literal int        PARAM_PACKAGE_FW335 = 6;
-    literal int        PARAM_PACKAGE_FW336 = 6;
-    literal int        PARAM_PACKAGE_FWCAN = 7;
+    literal int        PARAM_PACKAGE_FW334 = 7;
+    literal int        PARAM_PACKAGE_FW336 = 8;
+    literal int        PARAM_PACKAGE_FW349 = 9;
+    literal int        PARAM_PACKAGE_FWCAN = 10;
 
     literal System::String^    PARAM_PACKAGE_ID_DEFAULT =    "1.0";
     literal System::String^    PARAM_PACKAGE_FW301_DEFAULT = "0.1";
@@ -186,8 +188,8 @@ public:
     literal System::String^    PARAM_PACKAGE_FW325_DEFAULT = "0.1";
     literal System::String^    PARAM_PACKAGE_FW326_DEFAULT = "0.1";
     literal System::String^    PARAM_PACKAGE_FW334_DEFAULT = "0.1";
-    literal System::String^    PARAM_PACKAGE_FW335_DEFAULT = "0.1";
     literal System::String^    PARAM_PACKAGE_FW336_DEFAULT = "0.1";
+    literal System::String^    PARAM_PACKAGE_FW349_DEFAULT = "0.1";
     literal System::String^    PARAM_PACKAGE_FWCAN_DEFAULT = "0.1";
 
     /// \addtogroup  ConfigurationFilesDescription 
@@ -279,7 +281,8 @@ public:
             PARAM_SYM_MODE_PCB325_DEFAULT,
             PARAM_SYM_MODE_PCB326_DEFAULT,
             PARAM_SYM_MODE_PCB334_DEFAULT,
-            PARAM_SYM_MODE_PCB336_DEFAULT
+            PARAM_SYM_MODE_PCB336_DEFAULT,
+            PARAM_SYM_MODE_PCB349_DEFAULT
             }),
 
 
@@ -296,8 +299,8 @@ public:
             PARAM_PACKAGE_FW325_DEFAULT,
             PARAM_PACKAGE_FW326_DEFAULT,
             PARAM_PACKAGE_FW334_DEFAULT,
-            PARAM_PACKAGE_FW335_DEFAULT,
             PARAM_PACKAGE_FW336_DEFAULT,
+            PARAM_PACKAGE_FW349_DEFAULT,
             PARAM_PACKAGE_FWCAN_DEFAULT,
             }),
          

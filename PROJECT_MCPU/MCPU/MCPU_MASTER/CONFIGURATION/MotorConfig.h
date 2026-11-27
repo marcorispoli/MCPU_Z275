@@ -101,46 +101,6 @@ public:
 
 
 
-    /// \addtogroup  ConfigurationFilesDescription 
-    /// 
-    /// ### Body Motor Parameters Row
-    /// 
-    /// This parameter row set the behavior of the Body motor activation.
-    /// 
-    /// < BODY_CALIBRATION, ExternalSensorCalibration, CurrentPosition, AutoSpeed, AutoAcc, AutoDec,ManualSpeed, ManualAcc, ManualDec,ZeroSettingSpeed,ZeroSettingAcc,>
-    /// 
-    /// |Param|Type|Default|Range|Descrption|
-    /// |:--|:--|:--|:--|:--|
-    /// |ExternalSensorCalibration|Variant|"UNDEF"|"INTERNAL"/"UNDEF"/32-bit|See table below|
-    /// |CurrentPosition|32 bit Integer|"UNDEF"|0:0xFFFFFFFF|This is the last motor valid position in 0.1 degree/units|
-    /// |AutoSpeed|16 bit Integer|50|0:0xFFFF|Speed in 0.1 degree / seconds of the motor rotation when in auto mode|
-    /// |AutoAcc|16 bit Integer|20|0:0xFFFF|Aceleration in 0.1 degree / seconds^2 of the motor rotation when in auto mode|
-    /// |AutoDec|16 bit Integer|20|0:0xFFFF|Deceleration in 0.1 degree / seconds^2 of the motor rotation when in auto mode|
-    /// |ManualSpeed|16 bit Integer|50|0:0xFFFF|Speed in 0.1 degree / seconds of the motor rotation when in manual mode|
-    /// |ManaulAcc|16 bit Integer|20|0:0xFFFF|Aceleration in 0.1 degree / seconds^2 of the motor rotation when in manual mode|
-    /// |ManualDec|16 bit Integer|100|0:0xFFFF|Deceleration in 0.1 degree / seconds^2 of the motor rotation when in manual mode|
-    /// |ZeroSettingSpeed|16 bit Integer|50|0:0xFFFF|Speed in 0.1 degree / seconds of the motor rotation when in zero setting mode|
-    /// |ZeroSettingAcc|16 bit Integer|10|0:0xFFFF|Aceleration in 0.1 degree / seconds^2 of the motor rotation when in zero setting mode|
-    /// 
-    /// ExternalSensorCalibration:
-    /// + "INTERNAL": the current position is determined by the incremental encoder internal of the motor.
-    /// The current position value is stored into the CurrentPosition field after every activation.
-    /// + "UNDEF": the position is determined by an external 10 bit potentiometer connected with the motor that is not yet initialized.
-    /// + 10 bit Integer value: this is the sensor value when the motor is in the mechanical zero position.
-    /// 
-    literal System::String^ PARAM_BODY = "BODY_CALIBRATION";                               //!< This is the Body Motor parameter section
-    literal System::String^ PARAM_BODY_COMMENT = "BODY_CALIBRATION calibration data";
-    literal System::String^ PARAM_BODY_EXTERNAL_ZERO_DEFAULT = MOTOR_EXTERNAL_UNDEFINED_POSITION;           //!< Initial pot zero setting
-    literal System::String^ PARAM_BODY_CURRENT_POSITION_DEFAULT = MOTOR_UNDEFINED_POSITION;        //!< The last valid Body Motor position (for initial zero setting)
-    literal System::String^ PARAM_BODY_AUTO_SPEED_DEFAULT = "50";                                  //!< Body Auto Speed in 0.1 degree/s
-    literal System::String^ PARAM_BODY_AUTO_ACC_DEFAULT = "20";                                    //!< Body Auto Acc in 0.1 degree/ss
-    literal System::String^ PARAM_BODY_AUTO_DEC_DEFAULT = "20";                                    //!< Body Auto  Dec in 0.1 degree/ss
-    literal System::String^ PARAM_BODY_MANUAL_SPEED_DEFAULT = "50";                                //!< Body Manual  Speed in 0.1 degree/s
-    literal System::String^ PARAM_BODY_MANUAL_ACC_DEFAULT = "20";                                  //!< Body Manual  Acc in 0.1 degree/ss
-    literal System::String^ PARAM_BODY_MANUAL_DEC_DEFAULT = "100";                                  //!< Body Manual Dec in 0.1 degree/ss
-    literal System::String^ PARAM_BODY_HOME_SPEED_DEFAULT = "50";                                  //!< Body Home Speed in 0.1 degree/ss
-    literal System::String^ PARAM_BODY_HOME_ACC_DEFAULT = "10";                                    //!< Body Home Acc in 0.1 degree/ss
-
    /// \addtogroup  ConfigurationFilesDescription 
    /// 
    /// ### Arm Motor Parameters Row
@@ -264,46 +224,7 @@ public:
     literal System::String^ PARAM_TILT_HOME_SPEED_DEFAULT = "200";                                  //!< TILT Home Speed in 0.01 degree degree/ss
     literal System::String^ PARAM_TILT_HOME_ACC_DEFAULT = "100";                                    //!< TILT Home Acc in 0.01 degree degree/ss
 
-   /// \addtogroup  ConfigurationFilesDescription 
-   /// 
-   /// ### Slide Motor Parameters Row
-   /// 
-   /// This parameter row set the behavior of the Slide motor activation.
-   /// 
-   /// < SLIDE_CALIBRATION, ExternalSensorCalibration, CurrentPosition, AutoSpeed, AutoAcc, AutoDec,ManualSpeed, ManualAcc, ManualDec,ZeroSettingSpeed,ZeroSettingAcc,>
-   /// 
-   /// |Param|Type|Default|Range|Descrption|
-   /// |:--|:--|:--|:--|:--|
-   /// |ExternalSensorCalibration|Variant|"INTERNAL"|"INTERNAL"/"UNDEF"/32-bit|See table below|
-   /// |CurrentPosition|32 bit Integer|"UNDEF"|0:0xFFFFFFFF|This is the last motor valid position in 0.01 degree/units|
-   /// |AutoSpeed|16 bit Integer|400|0:0xFFFF|Speed in 0.01 degree / seconds of the motor rotation when in auto mode|
-   /// |AutoAcc|16 bit Integer|400|0:0xFFFF|Aceleration in 0.01 degree / seconds^2 of the motor rotation when in auto mode|
-   /// |AutoDec|16 bit Integer|400|0:0xFFFF|Deceleration in 0.01 degree / seconds^2 of the motor rotation when in auto mode|
-   /// |ManualSpeed|16 bit Integer|400|0:0xFFFF|Speed in 0.01 degree / seconds of the motor rotation when in manual mode|
-   /// |ManaulAcc|16 bit Integer|400|0:0xFFFF|Aceleration in 0.01 degree / seconds^2 of the motor rotation when in manual mode|
-   /// |ManualDec|16 bit Integer|400|0:0xFFFF|Deceleration in 0.01 degree / seconds^2 of the motor rotation when in manual mode|
-   /// |ZeroSettingSpeed|16 bit Integer|100|0:0xFFFF|Speed in 0.01 degree / seconds of the motor rotation when in zero setting mode|
-   /// |ZeroSettingAcc|16 bit Integer|100|0:0xFFFF|Aceleration in 0.01 degree / seconds^2 of the motor rotation when in zero setting mode|
-   /// 
-   /// ExternalSensorCalibration:
-   /// + "INTERNAL": the current position is determined by the incremental encoder internal of the motor.
-   /// The current position value is stored into the CurrentPosition field after every activation.
-   /// + "UNDEF": the position is determined by an external 10 bit potentiometer connected with the motor that is not yet initialized.
-   /// + 10 bit Integer value: this is the sensor value when the motor is in the mechanical zero position.
-   /// 
-    literal System::String^ PARAM_SLIDE = "SLIDE_CALIBRATION";                                       //!< This is the SLIDE Motor parameter section
-    literal System::String^ PARAM_SLIDE_COMMENT = "SLIDE_CALIBRATION calibration data";
-    literal System::String^ PARAM_SLIDE_EXTERNAL_ZERO_DEFAULT = MOTOR_INTERNAL_POSITION;                         //!< Initial pot zero setting
-    literal System::String^ PARAM_SLIDE_CURRENT_POSITION_DEFAULT = MOTOR_UNDEFINED_POSITION;         //!< The last valid encoder SLIDE Motor position (for initial zero setting)
-    literal System::String^ PARAM_SLIDE_AUTO_SPEED_DEFAULT = "400";                                  //!< SLIDE Auto Speed in 0.01 degree/s
-    literal System::String^ PARAM_SLIDE_AUTO_ACC_DEFAULT = "400";                                    //!< SLIDE Auto Acc in 0.01 degree/ss
-    literal System::String^ PARAM_SLIDE_AUTO_DEC_DEFAULT = "400";                                    //!< SLIDE Auto Dec in 0.01 degree/ss
-    literal System::String^ PARAM_SLIDE_MANUAL_SPEED_DEFAULT = "400";                                //!< SLIDE Manual Speed in 0.01 degree/s
-    literal System::String^ PARAM_SLIDE_MANUAL_ACC_DEFAULT = "400";                                  //!< SLIDE Manual Acc in 0.01 degree/ss
-    literal System::String^ PARAM_SLIDE_MANUAL_DEC_DEFAULT = "400";                                  //!< SLIDE Manual Dec in 0.01 degree/ss
-    literal System::String^ PARAM_SLIDE_HOME_SPEED_DEFAULT = "100";                                  //!< SLIDE Home Speed in 0.01 degree/ss
-    literal System::String^ PARAM_SLIDE_HOME_ACC_DEFAULT = "100";                                    //!< SLIDE Home Acc in 0.01 degree/ss
-
+  
     static ConfigFile^ Configuration = gcnew ConfigFile(FILENAME, FILE_REVISION,
         CONFIG_FILE_DESCRIPTOR
         {
@@ -322,19 +243,7 @@ public:
             PARAM_OBSTACLE_TH_CS8_DEFAULT
             }),
 
-            CONFIG_FILE_ITEM(PARAM_BODY, PARAM_BODY_COMMENT, CONFIG_FILE_DEFAULT{
-            PARAM_BODY_EXTERNAL_ZERO_DEFAULT,
-            PARAM_BODY_CURRENT_POSITION_DEFAULT,
-            PARAM_BODY_AUTO_SPEED_DEFAULT,
-            PARAM_BODY_AUTO_ACC_DEFAULT,
-            PARAM_BODY_AUTO_DEC_DEFAULT,
-            PARAM_BODY_MANUAL_SPEED_DEFAULT,
-            PARAM_BODY_MANUAL_ACC_DEFAULT,
-            PARAM_BODY_MANUAL_DEC_DEFAULT,
-            PARAM_BODY_HOME_SPEED_DEFAULT,
-            PARAM_BODY_HOME_ACC_DEFAULT
-            }),
-
+      
             CONFIG_FILE_ITEM(PARAM_ARM, PARAM_ARM_COMMENT, CONFIG_FILE_DEFAULT{
             PARAM_ARM_EXTERNAL_ZERO_DEFAULT,
             PARAM_ARM_CURRENT_POSITION_DEFAULT,
@@ -374,18 +283,7 @@ public:
             PARAM_TILT_HOME_ACC_DEFAULT
             }),
 
-            CONFIG_FILE_ITEM(PARAM_SLIDE, PARAM_SLIDE_COMMENT, CONFIG_FILE_DEFAULT{
-            PARAM_SLIDE_EXTERNAL_ZERO_DEFAULT,
-            PARAM_SLIDE_CURRENT_POSITION_DEFAULT,
-            PARAM_SLIDE_AUTO_SPEED_DEFAULT,
-            PARAM_SLIDE_AUTO_ACC_DEFAULT,
-            PARAM_SLIDE_AUTO_DEC_DEFAULT,
-            PARAM_SLIDE_MANUAL_SPEED_DEFAULT,
-            PARAM_SLIDE_MANUAL_ACC_DEFAULT,
-            PARAM_SLIDE_MANUAL_DEC_DEFAULT,
-            PARAM_SLIDE_HOME_SPEED_DEFAULT,
-            PARAM_SLIDE_HOME_ACC_DEFAULT
-            }),
+            
 
         }
     );

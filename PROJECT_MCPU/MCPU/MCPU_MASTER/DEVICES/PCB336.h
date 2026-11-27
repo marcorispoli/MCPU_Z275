@@ -112,7 +112,7 @@ public:
 		static Commands command;
 	};
 
-	PCB336() : CanDeviceProtocol(0x14, L"Filament")
+	PCB336() : CanDeviceProtocol(0x18, L"Filament")
 	{
 		// Data initializtion
 		

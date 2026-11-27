@@ -200,6 +200,9 @@
     <ClInclude Include="DEVICES\PCB336.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DEVICES\PCB349.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">
@@ -371,6 +374,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DEVICES\PCB336.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DEVICES\PCB349.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -414,28 +414,16 @@ protected:
     /// </summary>
     void resetCallback(void) override;
 
-    /// <summary>
-    /// This callback is called by the base class when the brake device shall be locked.
-    /// </summary>
-    bool brakeCallback(void) override;
-
-    /// <summary>
-    /// This callback is called by the base class when the brake device shall be unlocked.
-    /// </summary>
-    bool unbrakeCallback(void) override;
-
+   
 private:
 
     static bool idle_positioning = false;
 
-    static bool brake_alarm = false; //!< This is the current brake malfunction alarm
     static bool manual_increment_direction = false; //!< Sets true if the increment manual command is executing, false if the decrement manual activation is executing
     static bool tomo_scan = false;
     static target_options current_target = target_options::UNDEF;
     static target_options pending_target = target_options::UNDEF;
 
-    bool unlockBrake(void);
-    bool lockBrake(void);
     
 };
 

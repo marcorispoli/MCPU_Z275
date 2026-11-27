@@ -89,6 +89,10 @@
       <EntryPointSymbol>main</EntryPointSymbol>
       <AdditionalLibraryDirectories>$(ProjectDir)\SQL;$(ProjectDir)\VSCAN</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(ProjectDir)VSCAN\vs_can_api.dll" "$(OutDir)"
+xcopy /y /i "$(ProjectDir)..\..\..\PROJECT_SYM\SYM\x64\Release\SIMULATOR.exe" "$(OutDir)SIMULATOR\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -130,6 +134,10 @@
       <EntryPointSymbol>main</EntryPointSymbol>
       <AdditionalLibraryDirectories>$(ProjectDir)\SQL;$(ProjectDir)\VSCAN</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(ProjectDir)VSCAN\vs_can_api.dll" "$(OutDir)"
+xcopy /y /i "$(ProjectDir)..\..\..\PROJECT_SYM\SYM\x64\Release\SIMULATOR.exe" "$(OutDir)SIMULATOR\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
@@ -156,6 +164,7 @@
     <ClInclude Include="DEVICES\PCB326.h" />
     <ClInclude Include="DEVICES\PCB334.h" />
     <ClInclude Include="DEVICES\PCB336.h" />
+    <ClInclude Include="DEVICES\PCB349.h" />
     <ClInclude Include="EXPOSURES\ExposureModule.h" />
     <ClInclude Include="MESSAGES\Log.h" />
     <ClInclude Include="MOTORS\ArmMotor.h" />
@@ -245,6 +254,7 @@
     <ClCompile Include="DEVICES\PCB326.cpp" />
     <ClCompile Include="DEVICES\PCB334.cpp" />
     <ClCompile Include="DEVICES\PCB336.cpp" />
+    <ClCompile Include="DEVICES\PCB349.cpp" />
     <ClCompile Include="EXPOSURES\Exposure2DModule.cpp" />
     <ClCompile Include="EXPOSURES\Exposure3DCalibModule.cpp" />
     <ClCompile Include="EXPOSURES\Exposure3DModule.cpp" />

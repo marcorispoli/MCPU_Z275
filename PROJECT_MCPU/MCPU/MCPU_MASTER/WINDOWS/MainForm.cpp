@@ -20,6 +20,7 @@
 #include "PCB326.h"
 #include "PCB334.h"
 #include "PCB336.h"
+#include "PCB349.h"
 
 #include "ExposureModule.h"
 #include "Log.h"
@@ -77,8 +78,8 @@ void StartupOperatingModeForm::MainFormInitialize(void) {
 	LogClass::logInFile("FW325 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW325]);
 	LogClass::logInFile("FW326 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW326]);
 	LogClass::logInFile("FW334 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW334]);
-	LogClass::logInFile("FW335 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW335]);
 	LogClass::logInFile("FW336 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW336]);
+	LogClass::logInFile("FW349 Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FW349]);
 	LogClass::logInFile("FW-CAN Installed:" + SystemConfig::Configuration->getParam(SystemConfig::PARAM_PACKAGE)[SystemConfig::PARAM_PACKAGE_FWCAN]);
 
 	
@@ -585,53 +586,23 @@ bool StartupOperatingModeForm::Startup_PCB326(void) {
 	return false;
 }
 
-
+// PFC: per il momento viene solo lanciato.
 bool StartupOperatingModeForm::Startup_PCB334(void) {
-	System::String^ string;
-
-
-	switch (startupSubFase) {
-
-	case 0: // Creates the PCB315 process
-		labelPcb334Activity->Text = "CONNECTION ..";
-		string = "pcb334 initialization ..";
-		LogClass::logInFile(string);
-		if (Gantry::isPcb334Demo()) PCB334::device->simulMode();
-		else PCB334::device->runMode();
-		startupSubFase++;
-		break;
-
-	case 1: // Wait the connection and configuration
-		if (PCB334::device->isSimulatorMode()) {
-			labelPcb334Activity->Text = "RUN IN SIMULATION MODE";
-			labelPcb334Activity->ForeColor = Color::LightGreen;
-			return true;
-		}
-
-		if (PCB334::device->getModuleStatus() > CanDeviceProtocol::status_options::WAITING_REVISION) {
-			labelPcb334Activity->Text = "CONFIGURATION ..";
-			string = "pcb334 firmware revision: ";
-			string += " BOOT:" + PCB334::device->getBootStatus().ToString() + ", REV:" + PCB334::device->getBootRevision();
-			string += " APP:" + PCB334::device->getAppRevision();
-			LogClass::logInFile(string);
-			startupSubFase++;
-		}
-		break;
-
-	case 2: // Wait the connection and configuration		
-		if (PCB334::device->getModuleStatus() == CanDeviceProtocol::status_options::DEVICE_RUNNING) {
-			labelPcb334Activity->Text = "RUN IN NORMAL MODE";
-			labelPcb334Activity->ForeColor = Color::LightGreen;
-			return true;
-		}
-
-		break;
-
+	if (Gantry::isPcb334Demo()) {
+		PCB334::device->simulMode();
+		labelPcb334Activity->Text = "RUN IN SIMULATION MODE";
+		labelPcb334Activity->ForeColor = Color::LightGreen;
 	}
-	return false;
+	else {
+		PCB334::device->runMode();
+		labelPcb334Activity->Text = "RUN IN NORMAL MODE";
+		labelPcb334Activity->ForeColor = Color::LightGreen;
+	}
+	return true;
+
 }
 
-/*
+
 bool StartupOperatingModeForm::Startup_PCB349(void) {
 	System::String^ string;
 
@@ -640,34 +611,34 @@ bool StartupOperatingModeForm::Startup_PCB349(void) {
 
 	case 0: // Creates the PCB315 process
 		labelPcb349Activity->Text = "CONNECTION ..";
-		string = "pcb335 initialization ..";
+		string = "pcb349 initialization ..";
 		LogClass::logInFile(string);
 		if (Gantry::isPcb349Demo()) PCB349::device->simulMode();
-		else PCB335::device->runMode();
+		else PCB349::device->runMode();
 		startupSubFase++;
 		break;
 
 	case 1: // Wait the connection and configuration
-		if (PCB335::device->isSimulatorMode()) {
-			labelPcb335Activity->Text = "RUN IN SIMULATION MODE";
-			labelPcb335Activity->ForeColor = Color::LightGreen;
+		if (PCB349::device->isSimulatorMode()) {
+			labelPcb349Activity->Text = "RUN IN SIMULATION MODE";
+			labelPcb349Activity->ForeColor = Color::LightGreen;
 			return true;
 		}
 
-		if (PCB335::device->getModuleStatus() > CanDeviceProtocol::status_options::WAITING_REVISION) {
-			labelPcb335Activity->Text = "CONFIGURATION ..";
-			string = "pcb335 firmware revision: ";
-			string += " BOOT:" + PCB335::device->getBootStatus().ToString() + ", REV:" + PCB335::device->getBootRevision();
-			string += " APP:" + PCB335::device->getAppRevision();
+		if (PCB349::device->getModuleStatus() > CanDeviceProtocol::status_options::WAITING_REVISION) {
+			labelPcb349Activity->Text = "CONFIGURATION ..";
+			string = "pcb349 firmware revision: ";
+			string += " BOOT:" + PCB349::device->getBootStatus().ToString() + ", REV:" + PCB349::device->getBootRevision();
+			string += " APP:" + PCB349::device->getAppRevision();
 			LogClass::logInFile(string);
 			startupSubFase++;
 		}
 		break;
 
 	case 2: // Wait the connection and configuration		
-		if (PCB335::device->getModuleStatus() == CanDeviceProtocol::status_options::DEVICE_RUNNING) {
-			labelPcb335Activity->Text = "RUN IN NORMAL MODE";
-			labelPcb335Activity->ForeColor = Color::LightGreen;
+		if (PCB349::device->getModuleStatus() == CanDeviceProtocol::status_options::DEVICE_RUNNING) {
+			labelPcb349Activity->Text = "RUN IN NORMAL MODE";
+			labelPcb349Activity->ForeColor = Color::LightGreen;
 			return true;
 		}
 
@@ -676,7 +647,7 @@ bool StartupOperatingModeForm::Startup_PCB349(void) {
 	}
 	return false;
 }
-*/
+
 bool StartupOperatingModeForm::Startup_PCB336(void) {
 	System::String^ string;
 
@@ -992,8 +963,8 @@ void StartupOperatingModeForm::StartupProcedure(void) {
 		PCB304SEQ,
 		PCB325SEQ,
 		PCB326SEQ,
-		PCB335SEQ,
 		PCB336SEQ,
+		PCB349SEQ,
 		VERTSEQ,
 		TILTSEQ,
 		ARMSEQ,
@@ -1011,6 +982,7 @@ void StartupOperatingModeForm::StartupProcedure(void) {
 	case PCB326SEQ: if (Startup_PCB326())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB326 process
 	case PCB334SEQ: if (Startup_PCB334())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB334 process
 	case PCB336SEQ: if (Startup_PCB336())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB336 process
+	case PCB349SEQ: if (Startup_PCB349())		{ startupFase++; startupSubFase = 0; } break; // Startup of the PCB349 process
 	case VERTSEQ:	if (Startup_MotorVertical()) { startupFase++; startupSubFase = 0; } break; // Startup of the Vertical Motor body process
 	case ARMSEQ:	if (Startup_MotorArm())		{ startupFase++; startupSubFase = 0; } break; // Startup of the Arm Motor  process
 	case TILTSEQ:	if (Startup_MotorTilt())	{ startupFase++; startupSubFase = 0; } break; // Startup of the Tilt Motor body process	

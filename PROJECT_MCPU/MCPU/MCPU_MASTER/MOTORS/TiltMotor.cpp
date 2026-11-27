@@ -368,11 +368,6 @@ void TiltMotor::resetCallback(void) {
 /// 
 /// The Tilt motor device initializes here the specific device's register.
 /// 
-/// The module, after register initialization, set the brake device in order 
-/// to evaluates the correct behavior:
-/// - Executes an unlock procedure;
-/// - Executes a lock procedure;
-/// - in case of wrong locking status the Notify::messages::ERROR_TILT_MOTOR_BRAKE_FAULT error is generated.
 /// 
 /// <param name=""></param>
 /// <returns>true if the initialization termines successfully</returns>
@@ -397,23 +392,6 @@ unsigned short TiltMotor::initializeSpecificObjectDictionaryCallback(void) {
     if (!blocking_writeOD(OD_3240_06, 0)) return 0;   // Input Range Select: threshold = 5V;
 
   
-
-    // Test unlock brake
-    if (!unlockBrake()) {
-        LogClass::logInFile("TiltMotor: Failed test unlock brake");
-        Notify::activate(Notify::messages::ERROR_TILT_MOTOR_BRAKE_FAULT);
-        brake_alarm = true;
-        return TILT_OD_CODE;
-    }
-
-    // Test lock brake
-    if (!lockBrake()) {
-        LogClass::logInFile("TiltMotor: Failed test lock brake");
-        Notify::activate(Notify::messages::ERROR_TILT_MOTOR_BRAKE_FAULT);
-        brake_alarm = true;
-        return TILT_OD_CODE;
-    }
-
     return TILT_OD_CODE;
 }
 
@@ -493,101 +471,10 @@ bool TiltMotor::startManualHoming(int target_position) {
     else return device->activateManualHoming(target_position);
 }
 
-/// <summary>
-/// This function is internally used to command the brake to unlock.
-/// 
-/// </summary>
-/// <param name=""></param>
-/// <returns></returns>
-bool TiltMotor::unlockBrake(void) {
-    if (simulator_mode) return true;
 
-    // Sets the OUTPUT 1 properly
-    if (!blocking_writeOD(OD_60FE_01, UNLOCK_BRAKE_OUT_MASK)) {
-        blocking_writeOD(OD_60FE_01, LOCK_BRAKE_OUT_MASK);
-        return false;
-    }
-
-    // Test the input feedback to detect the effective unlock condition
-    for (int i = 0; i < 10; i++) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        if (!blocking_readOD(OD_60FD_00)) continue; // Reads the Inputs
-
-        // Unlock OK
-        if (UNLOCK_BRAKE_INPUT_MASK(getRxReg()->data)) return true;
-    }
-
-    // Error in detecting the brake activation
-    blocking_writeOD(OD_60FE_01, LOCK_BRAKE_OUT_MASK);
-    brake_alarm = true;
-    return false;
-}
-
-/// <summary>
-/// This function is internally used to command the brake to lock.
-/// 
-/// </summary>
-/// 
-/// <param name=""></param>
-/// <returns></returns>
-bool  TiltMotor::lockBrake(void) {
-    if (simulator_mode) return true;
-
-    // Sets the OUTPUT 1 properly   
-    if (!blocking_writeOD(OD_60FE_01, LOCK_BRAKE_OUT_MASK)) {        
-        return false;
-    }
-
-    // Test the input feedback to detect the effective deactivation
-    for (int i = 0; i < 10; i++) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        if (!blocking_readOD(OD_60FD_00)) continue; // Reads the Inputs
-        if (!UNLOCK_BRAKE_INPUT_MASK(getRxReg()->data)) return true;
-    }
-
-    // Error in detecting the brake activation    
-    brake_alarm = true;
-    return false;
-}
 
 // ______________________ BASE CLASS CALLBACKS _________________________________________________
 
-/// <summary>
-/// 
-/// </summary>
-/// 
-/// Usually when the activation termines, before to release the motor power torque 
-/// the brake device shall lock the shaft.
-/// 
-/// <param name=""></param>
-/// <returns>true if the brake correctly locks</returns>
-bool TiltMotor::brakeCallback(void) {
-
-    return lockBrake();
-}
-
-/// <summary>
-/// This callback is called by the base class when the brake device shall be unlocked.
-/// </summary>
-/// 
-/// The base class calls this callback after the motor torque is applied and before 
-/// to start the rotation.
-/// 
-/// The callback tests the effective unlocking condition.
-///  
-/// <param name=""></param>
-/// <returns>true if the brake device is correctly unlocked</returns>
-bool TiltMotor::unbrakeCallback(void) {
-
-
-    // Unlock the Brake device
-    if (!unlockBrake()) {
-        LogClass::logInFile("TiltMotor: Activation failed to unlock the brake device");
-        return false;
-    }
-
-    return true;
-}
 
 // IDLE STATUS ----------------------------------------------------------------------
 
@@ -612,28 +499,9 @@ TiltMotor::MotorCompletedCodes TiltMotor::idleCallback(void) {
     MotorCompletedCodes ret_code = MotorCompletedCodes::COMMAND_PROCEED;
     
     if (!device->simulator_mode) {
-
-        // With the brake alarm present, no more action can be executed
-        if (brake_alarm) {
-
-            // Keeps the alarm ON
-            Notify::activate(Notify::messages::ERROR_TILT_MOTOR_BRAKE_FAULT);
-
-            // Alarm condition
-            lockBrake();
-            ret_code = MotorCompletedCodes::ERROR_BRAKE_DEVICE;
-        }
-        else {
             // reads the Motor GPIO inputs
             if (!blocking_readOD(OD_60FD_00)) return MotorCompletedCodes::ERROR_ACCESS_REGISTER;
-            if (UNLOCK_BRAKE_INPUT_MASK(getRxReg()->data)) {
-                brake_alarm = true;
-                LogClass::logInFile("TiltMotor: brake detected unlocked in IDLE");
-                ret_code = MotorCompletedCodes::ERROR_BRAKE_DEVICE;
-            }
-        }
-
-    } // simulator_mode
+    } 
 
    
 

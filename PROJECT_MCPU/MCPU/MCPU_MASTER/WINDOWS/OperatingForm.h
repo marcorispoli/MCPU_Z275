@@ -107,7 +107,7 @@ private: System::Windows::Forms::Label^ angleText;
 private: System::Windows::Forms::Panel^ lampButton;
 
 // Slide selection
-private: System::Windows::Forms::Panel^ slideButton; 
+
 
 // Alarm button
 private: System::Windows::Forms::Panel^ alarmButton;
@@ -161,6 +161,8 @@ private:
 		this->magnifierStatus = (gcnew System::Windows::Forms::Panel());
 		this->labelMag = (gcnew System::Windows::Forms::Label());
 		this->mainPanel = (gcnew System::Windows::Forms::Panel());
+		this->aecButton = (gcnew System::Windows::Forms::Panel());
+		this->labelAec = (gcnew System::Windows::Forms::Label());
 		this->xrayStat = (gcnew System::Windows::Forms::Panel());
 		this->demoIcon = (gcnew System::Windows::Forms::PictureBox());
 		this->labelXrayStatus = (gcnew System::Windows::Forms::Label());
@@ -178,14 +180,12 @@ private:
 		this->doorStatus = (gcnew System::Windows::Forms::Panel());
 		this->tubeStatus = (gcnew System::Windows::Forms::Panel());
 		this->labelTubeData = (gcnew System::Windows::Forms::Label());
-		this->slideButton = (gcnew System::Windows::Forms::Panel());
 		this->collimationStatus = (gcnew System::Windows::Forms::Panel());
 		this->labelColli = (gcnew System::Windows::Forms::Label());
 		this->decompressionStatus = (gcnew System::Windows::Forms::Panel());
-		this->aecButton = (gcnew System::Windows::Forms::Panel());
-		this->labelAec = (gcnew System::Windows::Forms::Label());
 		this->magnifierStatus->SuspendLayout();
 		this->mainPanel->SuspendLayout();
+		this->aecButton->SuspendLayout();
 		this->xrayStat->SuspendLayout();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->demoIcon))->BeginInit();
 		this->projSelection->SuspendLayout();
@@ -194,7 +194,6 @@ private:
 		this->paddleStatus->SuspendLayout();
 		this->tubeStatus->SuspendLayout();
 		this->collimationStatus->SuspendLayout();
-		this->aecButton->SuspendLayout();
 		this->SuspendLayout();
 		// 
 		// labelDate
@@ -269,7 +268,6 @@ private:
 		this->mainPanel->Controls->Add(this->paddleStatus);
 		this->mainPanel->Controls->Add(this->doorStatus);
 		this->mainPanel->Controls->Add(this->tubeStatus);
-		this->mainPanel->Controls->Add(this->slideButton);
 		this->mainPanel->Controls->Add(this->collimationStatus);
 		this->mainPanel->Controls->Add(this->decompressionStatus);
 		this->mainPanel->Controls->Add(this->labelDate);
@@ -280,6 +278,28 @@ private:
 		this->mainPanel->Name = L"mainPanel";
 		this->mainPanel->Size = System::Drawing::Size(600, 1024);
 		this->mainPanel->TabIndex = 14;
+		// 
+		// aecButton
+		// 
+		this->aecButton->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+		this->aecButton->Controls->Add(this->labelAec);
+		this->aecButton->Location = System::Drawing::Point(306, 524);
+		this->aecButton->Name = L"aecButton";
+		this->aecButton->Size = System::Drawing::Size(135, 135);
+		this->aecButton->TabIndex = 24;
+		this->aecButton->Click += gcnew System::EventHandler(this, &OperatingForm::aecButton_Click);
+		// 
+		// labelAec
+		// 
+		this->labelAec->BackColor = System::Drawing::Color::Transparent;
+		this->labelAec->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->labelAec->Location = System::Drawing::Point(0, 101);
+		this->labelAec->Name = L"labelAec";
+		this->labelAec->Size = System::Drawing::Size(135, 25);
+		this->labelAec->TabIndex = 1;
+		this->labelAec->Text = L"AUTO";
+		this->labelAec->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 		// 
 		// xrayStat
 		// 
@@ -459,14 +479,6 @@ private:
 		this->labelTubeData->Text = L"100%";
 		this->labelTubeData->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 		// 
-		// slideButton
-		// 
-		this->slideButton->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-		this->slideButton->Location = System::Drawing::Point(159, 524);
-		this->slideButton->Name = L"slideButton";
-		this->slideButton->Size = System::Drawing::Size(135, 135);
-		this->slideButton->TabIndex = 0;
-		// 
 		// collimationStatus
 		// 
 		this->collimationStatus->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
@@ -496,28 +508,6 @@ private:
 		this->decompressionStatus->Size = System::Drawing::Size(135, 135);
 		this->decompressionStatus->TabIndex = 0;
 		// 
-		// aecButton
-		// 
-		this->aecButton->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-		this->aecButton->Controls->Add(this->labelAec);
-		this->aecButton->Location = System::Drawing::Point(306, 524);
-		this->aecButton->Name = L"aecButton";
-		this->aecButton->Size = System::Drawing::Size(135, 135);
-		this->aecButton->TabIndex = 24;
-		this->aecButton->Click += gcnew System::EventHandler(this, &OperatingForm::aecButton_Click);
-		// 
-		// labelAec
-		// 
-		this->labelAec->BackColor = System::Drawing::Color::Transparent;
-		this->labelAec->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-			static_cast<System::Byte>(0)));
-		this->labelAec->Location = System::Drawing::Point(0, 101);
-		this->labelAec->Name = L"labelAec";
-		this->labelAec->Size = System::Drawing::Size(135, 25);
-		this->labelAec->TabIndex = 1;
-		this->labelAec->Text = L"AUTO";
-		this->labelAec->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-		// 
 		// OperatingForm
 		// 
 		this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(60)), static_cast<System::Int32>(static_cast<System::Byte>(60)),
@@ -531,6 +521,7 @@ private:
 		this->magnifierStatus->ResumeLayout(false);
 		this->mainPanel->ResumeLayout(false);
 		this->mainPanel->PerformLayout();
+		this->aecButton->ResumeLayout(false);
 		this->xrayStat->ResumeLayout(false);
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->demoIcon))->EndInit();
 		this->projSelection->ResumeLayout(false);
@@ -539,7 +530,6 @@ private:
 		this->paddleStatus->ResumeLayout(false);
 		this->tubeStatus->ResumeLayout(false);
 		this->collimationStatus->ResumeLayout(false);
-		this->aecButton->ResumeLayout(false);
 		this->ResumeLayout(false);
 
 	}

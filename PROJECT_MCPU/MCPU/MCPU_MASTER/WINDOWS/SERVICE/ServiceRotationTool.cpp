@@ -37,22 +37,19 @@ static int command_delay = 30;
 static bool manual_mode = false;
 static int selected_target;
 
-#define INFO_REASON_BODY_ACTIVATION 0
+
 #define INFO_REASON_TILT_ACTIVATION 1
 #define INFO_REASON_ARM_ACTIVATION 2
-#define INFO_REASON_SLIDE_ACTIVATION 3
-#define INFO_REASON_BODY_ERROR 4
+
+
 #define INFO_REASON_TILT_ERROR 5
 #define INFO_REASON_ARM_ERROR 6
-#define INFO_REASON_SLIDE_ERROR 7
 
 // Main Panel Definition
 #define FORM_BACKGROUND Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\ServiceBackground.PNG")
 
 #define ARM_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\Arm.PNG")
 #define ARM_SELECTED_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\ArmSelected.PNG")
-#define BODY_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\Body.PNG")
-#define BODY_SELECTED_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\BodySelected.PNG")
 #define TILT_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\Tilt.PNG")
 #define TILT_SELECTED_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\TiltSelected.PNG")
 #define MANUAL_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\Manual.PNG")
@@ -61,8 +58,6 @@ static int selected_target;
 
 #define ARM_VIEW_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\ArmView.PNG")
 #define ARM_VIEW_MANUAL_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\ArmViewManual.PNG")
-#define BODY_VIEW_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\BodyView.PNG")
-#define BODY_VIEW_MANUAL_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\BodyViewManual.PNG")
 #define TILT_VIEW_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\TiltView.PNG")
 #define TILT_VIEW_MANUAL_IMAGE Image::FromFile(Gantry::applicationResourcePath + "ServiceForm\\TOOLS\\ROTATION\\TiltViewManual.PNG")
 
@@ -101,7 +96,7 @@ void ServiceRotationTool::formInitialization(void) {
 	rotationToolPanel->BackColor = Color::Black;
 	rotationToolArmButton->BackColor = Color::Transparent;
 	rotationToolTiltButton->BackColor = Color::Transparent;
-	rotationToolBodyButton->BackColor = Color::Transparent;
+	
 	rotationToolManualButton->BackColor = Color::Transparent;
 
 	rotationToolSelectAngle1->BackColor = Color::Transparent;
@@ -134,7 +129,7 @@ void ServiceRotationTool::initPanel(void) {
 
 	rotationToolArmButton->BackgroundImage = ARM_IMAGE;
 	rotationToolTiltButton->BackgroundImage = TILT_IMAGE;
-	rotationToolBodyButton->BackgroundImage = BODY_IMAGE;
+	
 
 	manual_mode = false;
 	Gantry::setManualRotationMode(Gantry::manual_rotation_options::GANTRY_STANDARD_STATUS_MANUAL_ROTATION);
@@ -256,7 +251,7 @@ System::Void ServiceRotationTool::rotationTool_arm_Click(System::Object^ sender,
 	// Arm Button
 	current_rotation_selected = rotation_tool_selection::ARM_SELECTED;
 	rotationToolArmButton->BackgroundImage = ARM_SELECTED_IMAGE;
-	rotationToolBodyButton->BackgroundImage = BODY_IMAGE;
+	
 	rotationToolTiltButton->BackgroundImage = TILT_IMAGE;
 
 
@@ -310,66 +305,6 @@ System::Void ServiceRotationTool::rotationTool_arm_Click(System::Object^ sender,
 
 }
 
-System::Void ServiceRotationTool::rotationTool_body_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (current_rotation_command != rotation_commands::NO_COMMAND) return;
-	rotationToolView->Hide();
-	rotationTool_select_item(nullptr);
-
-	this->rotationToolView->Location = System::Drawing::Point(75, 391);
-	this->rotationToolView->Size = System::Drawing::Size(513, 450);
-	this->rotationToolManualButton->Location = System::Drawing::Point(430, 12);
-	rotationToolTargetAngle->SetBounds(0, 0, 250, 100);
-	rotationToolTargetAngle->Location = System::Drawing::Point((450 - 250) / 2, (450 - 100) / 2);
-
-	// Body Button
-	current_rotation_selected = rotation_tool_selection::BODY_SELECTED;
-	rotationToolArmButton->BackgroundImage = ARM_IMAGE;
-	rotationToolBodyButton->BackgroundImage = BODY_SELECTED_IMAGE;
-	rotationToolTiltButton->BackgroundImage = TILT_IMAGE;
-
-	// Manual Mode disabled
-	manual_mode = false;
-	rotationToolManualButton->BackgroundImage = MANUAL_IMAGE;
-
-	// RotationToolView setup
-	if (manual_mode)	rotationToolView->BackgroundImage = BODY_VIEW_MANUAL_IMAGE;
-	else rotationToolView->BackgroundImage = BODY_VIEW_IMAGE;
-
-	rotationToolTargetAngle->Show();
-
-
-	rotationToolSelectAngle5->Show(); // 0°
-	rotationToolSelectAngle5->Tag = "0";
-	rotationToolSelectAngle5->Location = System::Drawing::Point(181, 350);
-
-	rotationToolSelectAngle4->Show(); // 45°
-	rotationToolSelectAngle4->Tag = "45";
-	rotationToolSelectAngle4->Location = System::Drawing::Point(301, 297);
-
-	rotationToolSelectAngle3->Show(); // 90°
-	rotationToolSelectAngle3->Tag = "88";
-	rotationToolSelectAngle3->Location = System::Drawing::Point(349, 176);
-
-	rotationToolSelectAngle6->Show(); // -45°
-	rotationToolSelectAngle6->Tag = "-45";
-	rotationToolSelectAngle6->Location = System::Drawing::Point(60, 302);
-
-	rotationToolSelectAngle7->Show(); // -90°
-	rotationToolSelectAngle7->Tag = "-88";
-	rotationToolSelectAngle7->Location = System::Drawing::Point(7, 182);
-
-
-
-	rotationToolSelectAngle1->Hide();
-	rotationToolSelectAngle2->Hide();
-	rotationToolSelectAngle8->Hide();
-	rotationToolSelectAngle9->Hide();
-	rotationToolView->Show();
-
-	rotationTooCreateInfoPanel(INFO_REASON_BODY_ACTIVATION);
-}
-
-
 System::Void ServiceRotationTool::rotationTool_tilt_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (current_rotation_command != rotation_commands::NO_COMMAND) return;
 	rotationToolView->Hide();
@@ -385,7 +320,7 @@ System::Void ServiceRotationTool::rotationTool_tilt_Click(System::Object^ sender
 
 	current_rotation_selected = rotation_tool_selection::TILT_SELECTED;
 	rotationToolArmButton->BackgroundImage = ARM_IMAGE;
-	rotationToolBodyButton->BackgroundImage = BODY_IMAGE;
+	
 	rotationToolTiltButton->BackgroundImage = TILT_SELECTED_IMAGE;
 
 	manual_mode = false;

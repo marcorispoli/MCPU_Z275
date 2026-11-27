@@ -221,6 +221,7 @@ namespace StartupOperatingMode {
 	private: bool Startup_PCB326(void);
 	private: bool Startup_PCB334(void);
 	private: bool Startup_PCB336(void);
+	private: bool Startup_PCB349(void);
 	private: bool Startup_MotorTilt(void);
 	private: bool Startup_MotorArm(void);
 	private: bool Startup_MotorVertical(void);
